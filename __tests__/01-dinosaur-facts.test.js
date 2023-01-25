@@ -141,9 +141,9 @@ describe("getDinosaursAliveMya()", () => {
 
   test("if the third argument is set, but to a key that doesn't return a value, should return the IDs", () => {
     const mya = 66;
-    const key = "name";
+    const key = "incorrectKey";
     const actual = getDinosaursAliveMya(dinosaurs, mya, key);
-    const expected = ["Dracorex", "Indosuchus", "Tyrannosaurus"];
+    const expected = ["WHQcpcOj0G", "2GglUqKT0G", "wuL4ddBinQ"];
 
     expect(actual).toEqual(expected);
   });
