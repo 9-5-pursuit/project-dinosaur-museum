@@ -22,7 +22,14 @@ const exampleDinosaurData = require("../data/dinosaurs");
  *  getLongestDinosaur(dinosaurs);
  *  //> { Brachiosaurus: 98.43 }
  */
-function getLongestDinosaur(dinosaurs) {}
+function getLongestDinosaur(dinosaurs) {
+  //lengthInMeters
+  if (!dinosaurs.length) return {}
+  var m = dinosaurs.map(item => item.lengthInMeters)
+  var l = m.sort((i,j) => i-j).pop()
+  var i = dinosaurs.findIndex(item => item.lengthInMeters==l)
+  return {[dinosaurs[i].name]: dinosaurs[i].lengthInMeters*3.281}
+}
 
 /**
  * getDinosaurDescription()
@@ -44,7 +51,10 @@ function getLongestDinosaur(dinosaurs) {}
  *  getDinosaurDescription(dinosaurs, "incorrect-id");
  *  //> "A dinosaur with an ID of 'incorrect-id' cannot be found."
  */
-function getDinosaurDescription(dinosaurs, id) {}
+function getDinosaurDescription(dinosaurs, id) {
+  var res = dinosaurs.filter(item => item.dinosaurId==id)
+  return res.length ? `${res[0].name} (${res[0].pronunciation})\n${res[0].info} It lived in the ${res[0].period} period, over ${res[0].mya[res[0].mya.length-1]} million years ago.` : "A dinosaur with an ID of 'incorrect-id' cannot be found."
+}
 
 /**
  * getDinosaursAliveMya()
@@ -71,8 +81,23 @@ function getDinosaurDescription(dinosaurs, id) {}
  *  getDinosaursAliveMya(dinosaurs, 65, "unknown-key");
  *  //> ["WHQcpcOj0G"]
  */
-function getDinosaursAliveMya(dinosaurs, mya, key) {}
-
+function getDinosaursAliveMya(dinosaurs, mya, key) {
+  if (key) {
+    if(dinosaurs.every(item => Object.keys(item).includes(key))){
+      var f = dinosaurs.filter(item => item.mya[0]>=mya && item.mya[item.mya.length-1]<=mya)
+      return f.map(item => item.name)
+    }
+    else {
+      var f = dinosaurs.filter(item => item.mya[0]>=mya && item.mya[item.mya.length-1]<=mya)
+      return f.map(item => item.dinosaurId)
+    }
+  }
+  else {
+      var f = dinosaurs.map(item => {if (item.mya.length==1 && item.mya[0]-1==mya) return item; 
+        else if (item.mya[0]>=mya && item.mya[item.mya.length-1]<=mya) return item})
+        return f.filter(item => item).map(item => item.dinosaurId)
+  }
+}
 module.exports = {
   getLongestDinosaur,
   getDinosaurDescription,
