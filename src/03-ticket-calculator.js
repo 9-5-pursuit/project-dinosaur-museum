@@ -70,7 +70,7 @@ function calculateTicketPrice(ticketData, ticketInfo) {
   } else {
     return `Ticket type '${type}' cannot be found.`;
   } 
-
+  //tExtras is the extras array of the ticketInfo, as opposed to the extras in ticketData
   if (tExtras.length !== 0) {
     for (const extra of tExtras) {
       if (Object.keys(ticketData.extras).includes(extra)) {
