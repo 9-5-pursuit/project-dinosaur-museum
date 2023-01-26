@@ -138,9 +138,7 @@ function calculateTicketPrice(ticketData, ticketInfo) {
     //> "Ticket type 'discount' cannot be found."
  */
 function purchaseTickets(ticketData, purchases) {
-  const purchaseObjects = []
-
-  // console.log(ticketData.general.description)
+  const purchaseObjects = [];
 
   for (const purchase of purchases) {
     let purchaseObj = {
@@ -151,49 +149,47 @@ function purchaseTickets(ticketData, purchases) {
     }
 
     if (typeof calculateTicketPrice(ticketData, purchase) === "number") {
-      purchaseObj.price += calculateTicketPrice(ticketData, purchase)
+      purchaseObj.price += calculateTicketPrice(ticketData, purchase);
     } else {
-      return calculateTicketPrice(ticketData, purchase)
+      return calculateTicketPrice(ticketData, purchase);
     }
 
-    entArr = purchase.entrantType.split('')
-    entArr[0] = entArr[0].toUpperCase()
-    formattedEnt = entArr.join('')
+    entArr = purchase.entrantType.split('');
+    entArr[0] = entArr[0].toUpperCase();
+    formattedEnt = entArr.join('');
 
-    purchaseObj.entrantTypeF = formattedEnt
-    purchaseObj.ticketTypeF = ticketData[purchase.ticketType].description
+    purchaseObj.entrantTypeF = formattedEnt;
+    purchaseObj.ticketTypeF = ticketData[purchase.ticketType].description;
     if (purchase.extras.length !== 0) {
       for (const extra of purchase.extras) {
-        purchaseObj.extrasDesc.push(ticketData.extras[extra].description)
+        purchaseObj.extrasDesc.push(ticketData.extras[extra].description);
       }
     }
     
-    purchaseObjects.push(purchaseObj)
+    purchaseObjects.push(purchaseObj);
   }
 
-  let receiptString = `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------`
+  let receiptString = `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------`;
 
-  let totalPrice = 0
+  let totalPrice = 0;
 
   for (const p of purchaseObjects) {
-    let formattedPrice = p.price / 100
+    let formattedPrice = p.price / 100;
 
-    formattedPrice = Number(formattedPrice.toFixed(2))
-
-    totalPrice += formattedPrice
+    totalPrice += formattedPrice;
 
     if (p.extrasDesc.length !== 0) {
       if (p.extrasDesc.length > 1) {
-        receiptString += `\n${p.entrantTypeF} ${p.ticketTypeF}: $${formattedPrice}.00 (${p.extrasDesc.join(', ')})`
+        receiptString += `\n${p.entrantTypeF} ${p.ticketTypeF}: $${formattedPrice}.00 (${p.extrasDesc.join(', ')})`;
       } else {
-        receiptString += `\n${p.entrantTypeF} ${p.ticketTypeF}: $${formattedPrice}.00 (${p.extrasDesc[0]})`
+        receiptString += `\n${p.entrantTypeF} ${p.ticketTypeF}: $${formattedPrice}.00 (${p.extrasDesc[0]})`;
       }
     } else {
-      receiptString += `\n${p.entrantTypeF} ${p.ticketTypeF}: $${formattedPrice}.00`
+      receiptString += `\n${p.entrantTypeF} ${p.ticketTypeF}: $${formattedPrice}.00`;
     }
   }
 
-  receiptString += `\n-------------------------------------------\nTOTAL: $${totalPrice}.00`
+  receiptString += `\n-------------------------------------------\nTOTAL: $${totalPrice}.00`;
 
   return receiptString
 }
