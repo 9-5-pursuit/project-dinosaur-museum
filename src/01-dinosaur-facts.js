@@ -22,7 +22,28 @@ const exampleDinosaurData = require("../data/dinosaurs");
  *  getLongestDinosaur(dinosaurs);
  *  //> { Brachiosaurus: 98.43 }
  */
-function getLongestDinosaur(dinosaurs) {}
+function getLongestDinosaur(dinosaurs) {
+  let longDino = '';
+  let longDinoLength = 0;
+
+  for (dino of dinosaurs) {
+    if (dino.lengthInMeters > longDinoLength) {
+      longDinoLength = dino.lengthInMeters;
+      longDino = dino.name;
+    }
+  }
+
+  let longDinoLengthFeet = longDinoLength * 3.281;
+
+  const longDinoObj = {};
+
+  if (longDino !== '') {
+    longDinoObj[longDino] = longDinoLengthFeet;
+  }
+
+  return longDinoObj;
+
+}
 
 /**
  * getDinosaurDescription()
@@ -44,7 +65,34 @@ function getLongestDinosaur(dinosaurs) {}
  *  getDinosaurDescription(dinosaurs, "incorrect-id");
  *  //> "A dinosaur with an ID of 'incorrect-id' cannot be found."
  */
-function getDinosaurDescription(dinosaurs, id) {}
+function getDinosaurDescription(dinosaurs, id) {
+  let dinosaur = '';
+  let dinosaurPhono = '';
+  let dinosaurDesc = '';
+  let dinosaurPeriod = '';
+  let dinosaurTime = '';
+
+  for (dino of dinosaurs) {
+    if (id === dino.dinosaurId) {
+      dinosaur = dino.name;
+      dinosaurPhono = dino.pronunciation;
+      dinosaurDesc = dino.info;
+      dinosaurPeriod = dino.period;
+      
+      if (dino.mya.length < 2) {
+        dinosaurTime = dino.mya[0];
+      } else {
+        dinosaurTime = dino.mya[1];
+      }
+    }
+  }
+
+  if (dinosaur !== '') {
+    return `${dinosaur} (${dinosaurPhono})\n${dinosaurDesc} It lived in the ${dinosaurPeriod} period, over ${dinosaurTime} million years ago.`;
+  } else {
+    return `A dinosaur with an ID of '${id}' cannot be found.`;
+  }
+}
 
 /**
  * getDinosaursAliveMya()
@@ -71,7 +119,35 @@ function getDinosaurDescription(dinosaurs, id) {}
  *  getDinosaursAliveMya(dinosaurs, 65, "unknown-key");
  *  //> ["WHQcpcOj0G"]
  */
-function getDinosaursAliveMya(dinosaurs, mya, key) {}
+function getDinosaursAliveMya(dinosaurs, mya, key) {
+  let dinoArr = [];
+
+  for (dino of dinosaurs) {
+    if (dino[key] === undefined) {
+      if (dino.mya.length < 2) {
+        if (dino.mya[0] >= mya - 1 && dino.mya[0] <= mya + 1) {
+          dinoArr.push(dino.dinosaurId);
+        }
+      } else {
+        if (mya >= dino.mya[1] && mya <= dino.mya[0]) {
+          dinoArr.push(dino.dinosaurId);
+        }
+      }
+    } else {
+      if (dino.mya.length < 2) {
+        if (dino.mya[0] >= mya - 1 && dino.mya[0] <= mya + 1) {
+          dinoArr.push(dino[key]);
+        }
+      } else {
+        if (mya >= dino.mya[1] && mya <= dino.mya[0]) {
+          dinoArr.push(dino[key]);
+        }
+      }
+    }
+  }
+
+  return dinoArr;
+}
 
 module.exports = {
   getLongestDinosaur,
