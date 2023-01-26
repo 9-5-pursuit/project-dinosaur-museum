@@ -55,24 +55,25 @@ const exampleTicketData = require("../data/tickets");
     //> "Entrant type 'kid' cannot be found."
  */
 function calculateTicketPrice(ticketData, ticketInfo) {
+
     var a = ticketInfo.ticketType
     var b = ticketInfo.entrantType
     var c = ticketInfo.extras
     
     if (!['child','adult','senior'].includes(b)) return `Entrant type '${b}' cannot be found.`
     if(!['general','membership'].includes(a)) return `Ticket type '${a}' cannot be found.`
-    if (c.length) var cf = c.filter(item => !['movie','education','terrace'].includes(item))
-    if (cf.length) return `Extra type '${cf[0]}' cannot be found.`
-
-    if (ticketData.hasOwnProperty(a)) {
+    if (c.length) {
+      var cf = c.filter(item => !['movie','education','terrace'].includes(item))
+      if (cf.length) return `Extra type '${cf[0]}' cannot be found.`
+  }
       var ip = ticketData[a].priceInCents[b]
+      var rp = 0
+    if (c.length){
       for (var e of c) {
-        var lp = ticketData.extras[e].priceInCents[b]
-        return ip + lp
+        rp += ticketData.extras[e].priceInCents[b]
       }
-    }
-
-  
+      return rp+ip
+    } else return ip  
 }
 
 /**
@@ -130,6 +131,37 @@ function calculateTicketPrice(ticketData, ticketInfo) {
  */
 function purchaseTickets(ticketData, purchases) {
 
+    var cf = purchases.filter(item => !['general','membership'].includes(item.ticketType))
+    if (cf.length) return `Ticket type '${cf[0].ticketType}' cannot be found.`
+
+    var ef = purchases.filter(item => !['child','adult','senior'].includes(item.entrantType))
+    if (ef.length) return `Entrant type '${ef[0].entrantType}' cannot be found.`
+
+    for (var em of purchases) {
+      if (em.extras.length) {
+        var vf = em.extras.filter(item => !['movie','education','terrace'].includes(item))
+        if (vf.length) return `Extra type '${vf[0]}' cannot be found.`
+      }
+    }
+
+    var res = 0
+    var rstring = `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------`
+    for (var tm of purchases) {
+
+      var a = tm.ticketType
+      var b = tm.entrantType
+      var c = tm.extras
+
+      var ip = ticketData[a].priceInCents[b]
+      var rp = 0
+      for (var e of c) {
+        rp += ticketData.extras[e].priceInCents[b]
+      }
+      res += rp+ip
+      if (tm.extras.length) var ts = ` (${tm.extras.map(item => {return item[0].toUpperCase()+item.substring(1)+' Access'}).join(', ')})`
+      rstring += `\n${tm.entrantType[0].toUpperCase()+tm.entrantType.substring(1)} ${tm.ticketType[0].toUpperCase()+tm.ticketType.substring(1)} Admission: $${((rp+ip)/100).toFixed(2)}${ts??''}` 
+    }
+    return rstring + `\n-------------------------------------------\nTOTAL: $${(res/100).toFixed(2)}`
 }
 
 // Do not change anything below this line.
