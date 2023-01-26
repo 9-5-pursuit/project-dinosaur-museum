@@ -191,7 +191,7 @@ function purchaseTickets(ticketData, purchases) {
 
   receiptString += `\n-------------------------------------------\nTOTAL: $${totalPrice}.00`;
 
-  return receiptString
+  return receiptString;
 }
 
 const ticketInfo = [
