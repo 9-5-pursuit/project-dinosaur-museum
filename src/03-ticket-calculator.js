@@ -54,7 +54,35 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  let ticketPrice = 0;
+
+  let type = ticketInfo.ticketType
+  let entrant = ticketInfo.entrantType
+  let tExtras = ticketInfo.extras
+
+  if (ticketData[type] !== undefined && ticketData[type] !== "extras") {
+    if (Object.keys(ticketData[type]["priceInCents"]).includes(entrant)) {
+      ticketPrice += ticketData[type]["priceInCents"][entrant];
+    } else {
+      return `Entrant type '${entrant}' cannot be found.`;
+    }
+  } else {
+    return `Ticket type '${type}' cannot be found.`;
+  } 
+
+  if (tExtras.length !== 0) {
+    for (const extra of tExtras) {
+      if (Object.keys(ticketData.extras).includes(extra)) {
+        ticketPrice += ticketData.extras[extra].priceInCents[entrant];
+      } else {
+        return `Extra type '${extra}' cannot be found.`;
+      }
+    }
+  }
+
+  return ticketPrice;
+}
 
 /**
  * purchaseTickets()
@@ -109,7 +137,76 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function purchaseTickets(ticketData, purchases) {
+  const purchaseObjects = []
+
+  // console.log(ticketData.general.description)
+
+  for (const purchase of purchases) {
+    let purchaseObj = {
+      price : 0,
+      entrantTypeF : '',
+      ticketTypeF : '',
+      extrasDesc : []
+    }
+
+    if (typeof calculateTicketPrice(ticketData, purchase) === "number") {
+      purchaseObj.price += calculateTicketPrice(ticketData, purchase)
+    } else {
+      return calculateTicketPrice(ticketData, purchase)
+    }
+
+    entArr = purchase.entrantType.split('')
+    entArr[0] = entArr[0].toUpperCase()
+    formattedEnt = entArr.join('')
+
+    purchaseObj.entrantTypeF = formattedEnt
+    purchaseObj.ticketTypeF = ticketData[purchase.ticketType].description
+    if (purchase.extras.length !== 0) {
+      for (const extra of purchase.extras) {
+        purchaseObj.extrasDesc.push(ticketData.extras[extra].description)
+      }
+    }
+    
+    purchaseObjects.push(purchaseObj)
+  }
+
+  let receiptString = `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------`
+
+  let totalPrice = 0
+
+  for (const p of purchaseObjects) {
+    let formattedPrice = p.price / 100
+
+    formattedPrice = Number(formattedPrice.toFixed(2))
+
+    totalPrice += formattedPrice
+
+    if (p.extrasDesc.length !== 0) {
+      if (p.extrasDesc.length > 1) {
+        receiptString += `\n${p.entrantTypeF} ${p.ticketTypeF}: $${formattedPrice}.00 (${p.extrasDesc.join(', ')})`
+      } else {
+        receiptString += `\n${p.entrantTypeF} ${p.ticketTypeF}: $${formattedPrice}.00 (${p.extrasDesc[0]})`
+      }
+    } else {
+      receiptString += `\n${p.entrantTypeF} ${p.ticketTypeF}: $${formattedPrice}.00`
+    }
+  }
+
+  receiptString += `\n-------------------------------------------\nTOTAL: $${totalPrice}.00`
+
+  return receiptString
+}
+
+const ticketInfo = [
+    {
+    ticketType: "general",
+    entrantType: "adult", // Incorrect
+    extras: ["movie"],
+  }
+];
+
+// purchaseTickets(exampleTicketData, ticketInfo)
 
 // Do not change anything below this line.
 module.exports = {
