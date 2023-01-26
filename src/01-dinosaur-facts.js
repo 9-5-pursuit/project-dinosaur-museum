@@ -26,7 +26,7 @@ function getLongestDinosaur(dinosaurs) {
   let longDino = '';
   let longDinoLength = 0;
 
-  for (dino of dinosaurs) {
+  for (const dino of dinosaurs) {
     if (dino.lengthInMeters > longDinoLength) {
       longDinoLength = dino.lengthInMeters;
       longDino = dino.name;
@@ -72,7 +72,7 @@ function getDinosaurDescription(dinosaurs, id) {
   let dinosaurPeriod = '';
   let dinosaurTime = '';
 
-  for (dino of dinosaurs) {
+  for (const dino of dinosaurs) {
     if (id === dino.dinosaurId) {
       dinosaur = dino.name;
       dinosaurPhono = dino.pronunciation;
@@ -122,7 +122,7 @@ function getDinosaurDescription(dinosaurs, id) {
 function getDinosaursAliveMya(dinosaurs, mya, key) {
   let dinoArr = [];
 
-  for (dino of dinosaurs) {
+  for (const dino of dinosaurs) {
     if (dino[key] === undefined) {
       if (dino.mya.length < 2) {
         if (dino.mya[0] >= mya - 1 && dino.mya[0] <= mya + 1) {
