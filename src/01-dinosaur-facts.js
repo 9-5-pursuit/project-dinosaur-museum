@@ -22,7 +22,29 @@ const exampleDinosaurData = require("../data/dinosaurs");
  *  getLongestDinosaur(dinosaurs);
  *  //> { Brachiosaurus: 98.43 }
  */
-function getLongestDinosaur(dinosaurs) {}
+function getLongestDinosaur(dinosaurs) {
+  let obj = {};
+
+  if(dinosaurs.length === 0){
+    return obj;
+  }
+
+  let dinosaurName = dinosaurs[0].name;
+  let dinosaurHeight = dinosaurs[0].lengthInMeters;
+
+  for(let i = 1; i < dinosaurs.length; i++){
+    if(dinosaurs[i].lengthInMeters > dinosaurHeight){
+      dinosaurHeight = dinosaurs[i].lengthInMeters;
+      dinosaurName = dinosaurs[i].name;
+    }
+  }
+  
+  dinosaurHeight = (dinosaurHeight * 3.281);
+  
+  obj[dinosaurName] = dinosaurHeight;
+
+  return obj;
+}
 
 /**
  * getDinosaurDescription()
@@ -44,7 +66,23 @@ function getLongestDinosaur(dinosaurs) {}
  *  getDinosaurDescription(dinosaurs, "incorrect-id");
  *  //> "A dinosaur with an ID of 'incorrect-id' cannot be found."
  */
-function getDinosaurDescription(dinosaurs, id) {}
+function getDinosaurDescription(dinosaurs, id) {
+    
+  for(let i = 0; i < dinosaurs.length; i++){
+      if(id === dinosaurs[i].dinosaurId){
+          const name = dinosaurs[i].name;
+          const pronunciation = dinosaurs[i].pronunciation;
+          const info = dinosaurs[i].info;
+          const period = dinosaurs[i].period;
+          const year = dinosaurs[i].mya[dinosaurs[i].mya.length - 1]
+          
+          
+          return `${name} (${pronunciation})\n${info} It lived in the ${period} period, over ${year} million years ago.`;
+      }
+  }
+  
+  return `A dinosaur with an ID of '${id}' cannot be found.`
+}
 
 /**
  * getDinosaursAliveMya()
@@ -71,7 +109,9 @@ function getDinosaurDescription(dinosaurs, id) {}
  *  getDinosaursAliveMya(dinosaurs, 65, "unknown-key");
  *  //> ["WHQcpcOj0G"]
  */
-function getDinosaursAliveMya(dinosaurs, mya, key) {}
+function getDinosaursAliveMya(dinosaurs, mya, key) {
+  
+}
 
 module.exports = {
   getLongestDinosaur,
