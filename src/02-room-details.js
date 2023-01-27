@@ -25,7 +25,41 @@ const exampleRoomData = require("../data/rooms");
  *  getRoomByDinosaurName(dinosaurs, rooms, "Pterodactyl");
  *  //> "Dinosaur with name 'Pterodactyl' cannot be found."
  */
-function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
+function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
+  let dinosaur = 0;
+  let foundRoom = false;
+  let room = "";
+  for(let i = 0; i < dinosaurs.length; i++)
+  {
+    let element = dinosaurs[i];
+    if(element.name === dinosaurName)
+    {
+      dinosaur = element["dinosaurId"];
+    }
+  }
+  if(!dinosaur)
+  {
+    return "Dinosaur with name '"+dinosaurName+"' cannot be found.";
+  }
+  for(let i = 0; i < rooms.length; i++)
+  {
+    let element = rooms[i];
+    if(element.dinosaurs.includes(dinosaur))
+    {
+      //dinosaurId = element.dinosaurId;
+      foundRoom = true;
+      room = element.name
+;    }
+  }
+  if(!foundRoom)
+  {
+    return "Dinosaur with name '"+dinosaurName+"' cannot be found in any rooms.";
+  }
+  else
+  {
+    return room;
+  }
+}
 
 /**
  * getConnectedRoomNamesById()
@@ -49,7 +83,40 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
       "Kit Hopkins Education Wing"
     ]
  */
-function getConnectedRoomNamesById(rooms, id) {}
+    function getConnectedRoomNamesById(rooms, id) {
+      let foundRoom = false;
+      let roomArr = [];
+      let room = "";
+      let connectedRooms = [];
+      let roomIds = [];
+      for(let i = 0; i < rooms.length; i++) {
+        let element = rooms[i];
+        roomIds.push(element.roomId);
+        if(element.roomId === id) {
+          //dinosaurId = element.dinosaurId;
+          foundRoom = true;
+          connectedRooms = element.connectsTo
+        }
+      }
+    
+      if(!foundRoom) {
+        return "Room with ID of '"+id+"' could not be found.";
+      }
+      
+      for(let i = 0; i < connectedRooms.length; i++) {
+        let element = connectedRooms[i];
+        if(!roomIds.includes(element)) {
+          return "Room with ID of '"+element+"' could not be found.";
+        }
+        for(let x = 0; x < rooms.length; x++)  {
+          let nestedElement = rooms[x]
+          if(element === nestedElement.roomId) {
+            roomArr.push(nestedElement.name)
+          }
+        }
+      }
+      return roomArr;
+    }
 
 module.exports = {
   getRoomByDinosaurName,
