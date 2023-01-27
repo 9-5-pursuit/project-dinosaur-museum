@@ -25,10 +25,9 @@ const exampleDinosaurData = require("../data/dinosaurs");
 function getLongestDinosaur(dinosaurs) {
   //lengthInMeters
   if (!dinosaurs.length) return {}
-  var m = dinosaurs.map(item => item.lengthInMeters)
-  var l = m.sort((i,j) => i-j).pop()
-  var i = dinosaurs.findIndex(item => item.lengthInMeters==l)
-  return {[dinosaurs[i].name]: dinosaurs[i].lengthInMeters*3.281}
+  var a = [...dinosaurs].sort((i,j) => i.lengthInMeters-j.lengthInMeters).pop()
+  var b = dinosaurs.find(item => item.lengthInMeters==a.lengthInMeters)
+  return {[b.name]: b.lengthInMeters*3.281}
 }
 
 /**
