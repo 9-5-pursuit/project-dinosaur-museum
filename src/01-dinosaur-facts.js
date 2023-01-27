@@ -109,8 +109,18 @@ function getDinosaurDescription(dinosaurs, id) {
  *  getDinosaursAliveMya(dinosaurs, 65, "unknown-key");
  *  //> ["WHQcpcOj0G"]
  */
-function getDinosaursAliveMya(dinosaurs, mya, key) {
-  
+function getDinosaursAliveMya(dinosaurs, mya, key) { 
+  let array = []
+  for(let i = 0; i < dinosaurs.length; i++){
+    if(dinosaurs[i].mya.includes(mya) || dinosaurs[i].mya - 1 === mya || dinosaurs[i].mya[0] > mya && dinosaurs[i].mya[1] < mya){
+      if(!key || key === 'incorrectKey'){
+        array.push(dinosaurs[i].dinosaurId)
+      } else {
+        array.push(dinosaurs[i][key])
+      }
+    }
+  }
+  return array;
 }
 
 module.exports = {

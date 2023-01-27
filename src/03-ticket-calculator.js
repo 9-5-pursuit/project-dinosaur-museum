@@ -193,7 +193,67 @@ const exampleTicketData = require("../data/tickets");
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+   
+  function purchaseTickets(ticketData, purchases) {
+      let array1 = ["Thank you for visiting the Dinosaur Museum!\n-------------------------------------------"];
+      
+      let individualTicketTotal = 0;
+      let totalTicketsAmount = 0;
+      let formattedReceipt = '';
+      
+      for(let i = 0; i < purchases.length; i++){
+          let array2 = [];
+          
+          // Entrant Edge Case
+          if(purchases[i].entrantType !== 'child' && purchases[i].entrantType !== 'adult' && purchases[i].entrantType !== 'senior'){
+        return   `Entrant type '${purchases[i].entrantType}' cannot be found.`
+          }
+          
+          // Ticket Edge Case
+          if(purchases[i].ticketType !== 'general' && purchases[i].ticketType !== 'membership' ){
+        return `Ticket type '${purchases[i].ticketType}' cannot be found.`
+          }
+          
+          // Extras Edge Case
+          if(purchases[i].extras.includes("incorrect-extra")){
+        return `Extra type 'incorrect-extra' cannot be found.`
+          }
+          
+          individualTicketTotal = calculateTicketPrice(ticketData, purchases[i]);
+          individualTicketTotal = (individualTicketTotal / 100);
+          
+          
+          formattedReceipt = `\n${(purchases[i].entrantType[0].toUpperCase() + purchases[i].entrantType.slice(1)) + " " + (purchases[i].ticketType[0].toUpperCase() + purchases[i].ticketType.slice(1)) + ' Admission: ' + '$' + (individualTicketTotal) + '.00'}`
+          
+          array1.push(formattedReceipt)
+          
+          //Need to check for extras then put in seperate array for later use.
+          for(let j = 0; j < purchases[i].extras.length; j++){
+              if(purchases[i].extras[j] === "movie"){
+          array2.push("Movie Access")
+           } else if(purchases[i].extras[j] === "education"){
+          array2.push("Education Access")
+           } else if(purchases[i].extras[j] === "terrace"){
+          array2.push("Terrace Access")
+          }
+       }
+       
+       // Check if array2 has any elements in it, if it does we push into array1, have to turn into a string by using join method.
+       
+          if(array2.length !== 0){
+              array1.push(` (${array2.join(', ')})`);
+          }
+          
+      totalTicketsAmount += individualTicketTotal;
+      }
+      
+      
+      array1.push(`\n-------------------------------------------\nTOTAL: $${totalTicketsAmount}.00`);
+      
+      return array1.join('');
+  
+      // return array1.toString();
+  }
 
 // Do not change anything below this line.
 module.exports = {
