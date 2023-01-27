@@ -68,12 +68,11 @@ function calculateTicketPrice(ticketData, ticketInfo) {
   }
       var ip = ticketData[a].priceInCents[b]
       var rp = 0
-    if (c.length){
+
       for (var e of c) {
         rp += ticketData.extras[e].priceInCents[b]
       }
       return rp+ip
-    } else return ip  
 }
 
 /**
