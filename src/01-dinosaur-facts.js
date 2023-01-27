@@ -82,20 +82,13 @@ function getDinosaurDescription(dinosaurs, id) {
  */
 function getDinosaursAliveMya(dinosaurs, mya, key) {
   if (key) {
-    if(dinosaurs.every(item => Object.keys(item).includes(key))){
-      var f = dinosaurs.filter(item => item.mya[0]>=mya && item.mya[item.mya.length-1]<=mya)
-      return f.map(item => item.name)
-    }
-    else {
-      var f = dinosaurs.filter(item => item.mya[0]>=mya && item.mya[item.mya.length-1]<=mya)
-      return f.map(item => item.dinosaurId)
-    }
+    if(dinosaurs.every(item => Object.keys(item).includes(key)))
+      return dinosaurs.filter(item => item.mya[0]>=mya && item.mya[item.mya.length-1]<=mya).map(item => item.name);
+    
+    else return dinosaurs.filter(item => item.mya[0]>=mya && item.mya[item.mya.length-1]<=mya).map(item => item.dinosaurId)
   }
-  else {
-      var f = dinosaurs.map(item => {if (item.mya.length==1 && item.mya[0]-1==mya) return item; 
-        else if (item.mya[0]>=mya && item.mya[item.mya.length-1]<=mya) return item})
-        return f.filter(item => item).map(item => item.dinosaurId)
-  }
+  else return dinosaurs.filter(item => {if (item.mya.length==1 && item.mya[0]-1==mya) return item; 
+        else if (item.mya[0]>=mya && item.mya[item.mya.length-1]<=mya) return item}).map(item => item.dinosaurId)
 }
 module.exports = {
   getLongestDinosaur,
