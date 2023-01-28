@@ -26,17 +26,14 @@ function getLongestDinosaur(dinosaurs) {
   let highestLength = 0;
   let dinosaurIndex = 0;
   let newObj = {};
-  for(let i = 0; i < dinosaurs.length; i++)
-  {
+  for(let i = 0; i < dinosaurs.length; i++) {
     let element = dinosaurs[i];
-    if(element.lengthInMeters>highestLength)
-    {
+    if(element.lengthInMeters > highestLength) {
       highestLength = element.lengthInMeters;
       dinosaurIndex = i;
     }
   }
-  if(dinosaurIndex)
-  {
+  if(dinosaurIndex) {
     highestLength *=  3.281;
     newObj[`${dinosaurs[dinosaurIndex].name}`] = Number(highestLength.toFixed(2));
   }
