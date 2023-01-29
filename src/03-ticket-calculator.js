@@ -59,18 +59,17 @@ function calculateTicketPrice(ticketData, ticketInfo) {
     var a = ticketInfo.ticketType
     var b = ticketInfo.entrantType
     var c = ticketInfo.extras
-    
+    //key values from tickets.js file
     if (!['child','adult','senior'].includes(b)) return `Entrant type '${b}' cannot be found.`
     if(!['general','membership'].includes(a)) return `Ticket type '${a}' cannot be found.`
+
     if (c.length) {
       var cf = c.find(item => !['movie','education','terrace'].includes(item))
       if (cf) return `Extra type '${cf}' cannot be found.`
   }
       var ip = ticketData[a].priceInCents[b]
- 
-      for (var e of c) {
-        ip += ticketData.extras[e].priceInCents[b]
-      }
+
+      for (var e of c) ip += ticketData.extras[e].priceInCents[b];
       return ip
 }
 
@@ -128,35 +127,38 @@ function calculateTicketPrice(ticketData, ticketInfo) {
     //> "Ticket type 'discount' cannot be found."
  */
 function purchaseTickets(ticketData, purchases) {
+    
+    var af = purchases.find(item => !['general','membership'].includes(item.ticketType))
+      if (af) return `Ticket type '${af.ticketType}' cannot be found.`
 
-    var cf = purchases.find(item => !['general','membership'].includes(item.ticketType))
-      if (cf) return `Ticket type '${cf.ticketType}' cannot be found.`
+    var bf = purchases.find(item => !['child','adult','senior'].includes(item.entrantType))
+    if (bf) return `Entrant type '${bf.entrantType}' cannot be found.`
 
-    var ef = purchases.find(item => !['child','adult','senior'].includes(item.entrantType))
-    if (ef) return `Entrant type '${ef.entrantType}' cannot be found.`
-
-    for (var em of purchases) {
-      if (em.extras.length) {
-        var vf = em.extras.find(item => !['movie','education','terrace'].includes(item))
-        if (vf) return `Extra type '${vf}' cannot be found.`
+    for (var p of purchases) {
+      if (p.extras.length) {
+        var cf = p.extras.find(item => !['movie','education','terrace'].includes(item))
+        if (cf) return `Extra type '${cf}' cannot be found.`
       }
     }
-
+    //total price variable
     var res = 0
+    //return string gets concatenated in a loop
     var rstring = `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------`
     for (var tm of purchases) {
 
       var a = tm.ticketType
       var b = tm.entrantType
       var c = tm.extras
-
+      //subtotal variable
       var ip = ticketData[a].priceInCents[b]
+      //build return string with business math
+      //calculate extras
       for (var e of c) {
         ip += ticketData.extras[e].priceInCents[b]
       }
       res += ip
       if (tm.extras.length) var ts = ` (${tm.extras.map(item => {return item[0].toUpperCase()+item.substring(1)+' Access'}).join(', ')})`
-      rstring += `\n${tm.entrantType[0].toUpperCase()+tm.entrantType.substring(1)} ${tm.ticketType[0].toUpperCase()+tm.ticketType.substring(1)} Admission: $${((ip)/100).toFixed(2)}${ts??''}` 
+      rstring += `\n${tm.entrantType[0].toUpperCase()+tm.entrantType.substring(1)} ${tm.ticketType[0].toUpperCase()+tm.ticketType.substring(1)} Admission: $${(ip/100).toFixed(2)}${ts??''}` 
     }
     return rstring + `\n-------------------------------------------\nTOTAL: $${(res/100).toFixed(2)}`
 }
