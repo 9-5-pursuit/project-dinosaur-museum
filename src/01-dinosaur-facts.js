@@ -123,6 +123,7 @@ function getDinosaursAliveMya(dinosaurs, mya, key) {
   return array;
 }
 
+
 module.exports = {
   getLongestDinosaur,
   getDinosaurDescription,

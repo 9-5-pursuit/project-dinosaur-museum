@@ -193,7 +193,8 @@ const exampleTicketData = require("../data/tickets");
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-   
+  
+    
   function purchaseTickets(ticketData, purchases) {
       let array1 = ["Thank you for visiting the Dinosaur Museum!\n-------------------------------------------"];
       
