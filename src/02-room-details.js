@@ -94,11 +94,16 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
       
       for(let i = 0; i < array.length; i++){
           let roomId = array[i];
+          let test = array[i]; // We will be checking to see if the room numbers stored in the array are modified, if not modified it will return a error message.
           
           for(let j = 0; j < rooms.length; j++){
               if(roomId === rooms[j].roomId){
                   array[i] = rooms[j].name;
               }
+          }
+
+          if(array[i] === test){
+            return `Room with ID of 'incorrect-id' could not be found.`
           }
       }
       
