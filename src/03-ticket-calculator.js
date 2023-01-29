@@ -54,7 +54,91 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+    function calculateTicketPrice(ticketData, ticketInfo){
+      let ticketPrice;
+      
+      if(ticketInfo.ticketType !== 'general' && ticketInfo.ticketType !== 'membership'){
+          return `Ticket type '${ticketInfo.ticketType}' cannot be found.`
+      }
+      
+      if(ticketInfo.entrantType !== 'adult' && ticketInfo.entrantType !== 'child' && ticketInfo.entrantType !== 'senior'){
+          return `Entrant type '${ticketInfo.entrantType}' cannot be found.`
+      }
+      
+      for(let i = 0; i < ticketInfo.extras.length; i++){
+          if(ticketInfo.extras[i] !== 'movie' && ticketInfo.extras[i] !== 'education' && ticketInfo.extras[i] !== 'terrace'){
+              return `Extra type '${ticketInfo.extras[i]}' cannot be found.`
+          }
+      }
+      
+      
+      
+      
+      if(ticketInfo.ticketType === 'general'){
+          if(ticketInfo.entrantType === 'adult'){
+              ticketPrice = ticketData.general.priceInCents.adult;
+          }
+          if(ticketInfo.entrantType === 'child'){
+              ticketPrice = ticketData.general.priceInCents.child;
+          }
+          if(ticketInfo.entrantType === 'senior'){
+              ticketPrice = ticketData.general.priceInCents.senior;
+          }
+      }
+      
+      if(ticketInfo.ticketType === 'membership'){
+          if(ticketInfo.entrantType === 'adult'){
+              ticketPrice = ticketData.membership.priceInCents.adult;
+          }
+          if(ticketInfo.entrantType === 'child'){
+              ticketPrice = ticketData.membership.priceInCents.child;
+          }
+          if(ticketInfo.entrantType === 'senior'){
+              ticketPrice = ticketData.membership.priceInCents.senior;
+          }
+      }
+      //adult
+     if(ticketInfo.ticketType === 'general' || ticketInfo.ticketType === 'membership'){
+         if(ticketInfo.entrantType === 'adult' && ticketInfo.extras.includes('movie')){
+             ticketPrice += ticketData.extras.movie.priceInCents.adult;
+         }
+         if(ticketInfo.entrantType === 'adult' && ticketInfo.extras.includes('education')){
+             ticketPrice += ticketData.extras.education.priceInCents.adult;
+         }
+         if(ticketInfo.entrantType === 'adult' && ticketInfo.extras.includes('terrace')){
+             ticketPrice += ticketData.extras.terrace.priceInCents.adult;
+         }
+     }
+     
+     
+     //child
+        if(ticketInfo.ticketType === 'general' || ticketInfo.ticketType === 'membership'){
+         if(ticketInfo.entrantType === 'child' && ticketInfo.extras.includes('movie')){
+             ticketPrice += ticketData.extras.movie.priceInCents.child;
+         }
+         if(ticketInfo.entrantType === 'child' && ticketInfo.extras.includes('education')){
+             ticketPrice += ticketData.extras.education.priceInCents.child;
+         }
+         if(ticketInfo.entrantType === 'child' && ticketInfo.extras.includes('terrace')){
+             ticketPrice += ticketData.extras.terrace.priceInCents.child;
+         }
+     }
+     
+      //senior
+           if(ticketInfo.ticketType === 'general' || ticketInfo.ticketType === 'membership'){
+         if(ticketInfo.entrantType === 'senior' && ticketInfo.extras.includes('movie')){
+             ticketPrice += ticketData.extras.movie.priceInCents.senior;
+         }
+         if(ticketInfo.entrantType === 'senior' && ticketInfo.extras.includes('education')){
+             ticketPrice += ticketData.extras.education.priceInCents.senior;
+         }
+         if(ticketInfo.entrantType === 'senior' && ticketInfo.extras.includes('terrace')){
+             ticketPrice += ticketData.extras.terrace.priceInCents.senior;
+         }
+     }
+      
+      return ticketPrice;
+  }
 
 /**
  * purchaseTickets()
@@ -109,7 +193,68 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+  
+    
+  function purchaseTickets(ticketData, purchases) {
+      let array1 = ["Thank you for visiting the Dinosaur Museum!\n-------------------------------------------"];
+      
+      let individualTicketTotal = 0;
+      let totalTicketsAmount = 0;
+      let formattedReceipt = '';
+      
+      for(let i = 0; i < purchases.length; i++){
+          let array2 = [];
+          
+          // Entrant Edge Case
+          if(purchases[i].entrantType !== 'child' && purchases[i].entrantType !== 'adult' && purchases[i].entrantType !== 'senior'){
+        return   `Entrant type '${purchases[i].entrantType}' cannot be found.`
+          }
+          
+          // Ticket Edge Case
+          if(purchases[i].ticketType !== 'general' && purchases[i].ticketType !== 'membership' ){
+        return `Ticket type '${purchases[i].ticketType}' cannot be found.`
+          }
+          
+          // Extras Edge Case
+          if(purchases[i].extras.includes("incorrect-extra")){
+        return `Extra type 'incorrect-extra' cannot be found.`
+          }
+          
+          individualTicketTotal = calculateTicketPrice(ticketData, purchases[i]);
+          individualTicketTotal = (individualTicketTotal / 100);
+          
+          
+          formattedReceipt = `\n${(purchases[i].entrantType[0].toUpperCase() + purchases[i].entrantType.slice(1)) + " " + (purchases[i].ticketType[0].toUpperCase() + purchases[i].ticketType.slice(1)) + ' Admission: ' + '$' + (individualTicketTotal) + '.00'}`
+          
+          array1.push(formattedReceipt)
+          
+          //Need to check for extras then put in seperate array for later use.
+          for(let j = 0; j < purchases[i].extras.length; j++){
+              if(purchases[i].extras[j] === "movie"){
+          array2.push("Movie Access")
+           } else if(purchases[i].extras[j] === "education"){
+          array2.push("Education Access")
+           } else if(purchases[i].extras[j] === "terrace"){
+          array2.push("Terrace Access")
+          }
+       }
+       
+       // Check if array2 has any elements in it, if it does we push into array1, have to turn into a string by using join method.
+       
+          if(array2.length !== 0){
+              array1.push(` (${array2.join(', ')})`);
+          }
+          
+      totalTicketsAmount += individualTicketTotal;
+      }
+      
+      
+      array1.push(`\n-------------------------------------------\nTOTAL: $${totalTicketsAmount}.00`);
+      
+      return array1.join('');
+  
+      // return array1.toString();
+  }
 
 // Do not change anything below this line.
 module.exports = {

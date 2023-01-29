@@ -25,7 +25,34 @@ const exampleRoomData = require("../data/rooms");
  *  getRoomByDinosaurName(dinosaurs, rooms, "Pterodactyl");
  *  //> "Dinosaur with name 'Pterodactyl' cannot be found."
  */
-function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
+function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
+  let dinoId = '';
+  
+  for(let i = 0; i < dinosaurs.length; i++){
+      if(dinosaurName === dinosaurs[i].name){
+          dinoId = dinosaurs[i].dinosaurId;
+          break;
+      }
+  }
+
+  if(dinoId === ''){
+    return `Dinosaur with name '${dinosaurName}' cannot be found.`
+}
+  
+  for(let i = 0; i < rooms.length; i++){
+      let dinoArray = rooms[i].dinosaurs;
+      
+      for(let j = 0; j < dinoArray.length; j++){
+          if(dinoId === dinoArray[j]){
+              return rooms[i].name;
+          }
+      }
+  }
+
+  return `Dinosaur with name '${dinosaurName}' cannot be found in any rooms.`
+
+
+}
 
 /**
  * getConnectedRoomNamesById()
@@ -49,7 +76,40 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
       "Kit Hopkins Education Wing"
     ]
  */
-function getConnectedRoomNamesById(rooms, id) {}
+    function getConnectedRoomNamesById(rooms, id) {
+      let array = [];
+      
+      for(let i = 0; i < rooms.length; i++){
+          if(id === rooms[i].roomId){
+              let connectsToArray = rooms[i].connectsTo;
+              for(let j = 0; j < connectsToArray.length; j++){
+                  array.push(connectsToArray[j]);
+              }
+          }
+      }
+
+      if(array.length === 0){
+        return `Room with ID of '${id}' could not be found.`
+    }
+      
+      for(let i = 0; i < array.length; i++){
+          let roomId = array[i];
+          let test = array[i]; // We will be checking to see if the room numbers stored in the array are modified, if not modified it will return a error message.
+          
+          for(let j = 0; j < rooms.length; j++){
+              if(roomId === rooms[j].roomId){
+                  array[i] = rooms[j].name;
+              }
+          }
+
+          if(array[i] === test){
+            return `Room with ID of 'incorrect-id' could not be found.`
+          }
+      }
+      
+      return array;
+      
+  }
 
 module.exports = {
   getRoomByDinosaurName,
