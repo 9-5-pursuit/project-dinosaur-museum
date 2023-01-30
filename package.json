@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --runInBand",
-    "watch": "jest --watchAll"
+    "watch": "jest --watchAll",
+    "test-01": "jest --watchAll ./__tests__/01-dinosaur-facts.test.js",
+    "test-02": "jest --watchAll ./__tests__/02-room-details.test.js",
+    "test-03": "jest --watchAll ./__tests__/03-ticket-calculator.test.js"
   },
   "keywords": [],
   "author": "",
@@ -14,3 +17,4 @@
     "jest": "^27.0.6"
   }
 }
+
