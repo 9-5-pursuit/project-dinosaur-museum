@@ -61,7 +61,6 @@ function getLongestDinosaur(dinosaurs) {
  *  //> "A dinosaur with an ID of 'incorrect-id' cannot be found."
  */
 function getDinosaurDescription(dinosaurs, id) {
-  // if (!Object.values(dinosaurs[0]).includes(id)) return `A dinosaur with an ID of 'incorrect-id' cannot be found.`
   for (let i = 0; i < dinosaurs.length; i++) {
     if (dinosaurs[i].dinosaurId === id) {
       if (dinosaurs[i].mya.length > 1) { 

@@ -101,9 +101,6 @@ function getConnectedRoomNamesById(rooms, id) {
     }
   }
   
-
-  
-  
       for (let x = 0; x < arrOfRoomIds.length; x++) {
         for (let y = 0; y < rooms.length; y++) {
           if (arrOfRoomIds[x] === rooms[y].roomId) {
