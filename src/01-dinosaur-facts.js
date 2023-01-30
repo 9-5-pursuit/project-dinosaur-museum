@@ -22,7 +22,40 @@ const exampleDinosaurData = require("../data/dinosaurs");
  *  getLongestDinosaur(dinosaurs);
  *  //> { Brachiosaurus: 98.43 }
  */
-function getLongestDinosaur(dinosaurs) {}
+function getLongestDinosaur(dinosaurs) {
+  //convert meters to feet (times it by 3.281)
+
+  let inFeet;
+  let tallestDinosaur = {
+    name: "",
+    lengthInFeet: 0,
+  };
+  if (dinosaurs.length === 0) {
+    return {};
+  } else {
+    for (let i = 0; i < dinosaurs.length; i++) {
+      inFeet = dinosaurs[i].lengthInMeters * 3.281;
+      //dinosaurs[i].lengthInFeet = inFeet;
+
+      //console.log(dinosaurs[i].lengthInFeet);
+      if (inFeet > tallestDinosaur.lengthInFeet) {
+        tallestDinosaur.lengthInFeet = inFeet;
+        tallestDinosaur.name = dinosaurs[i].name;
+      }
+    }
+  }
+
+  let tallestName = tallestDinosaur.name;
+  let tallestHeight = tallestDinosaur.lengthInFeet;
+  let tallestData = {};
+
+  tallestData[tallestName] = tallestHeight;
+  //console.log(tallestData);
+
+  //console.log(tallestName, tallestHeight);
+
+  return tallestData;
+}
 
 /**
  * getDinosaurDescription()
@@ -44,7 +77,32 @@ function getLongestDinosaur(dinosaurs) {}
  *  getDinosaurDescription(dinosaurs, "incorrect-id");
  *  //> "A dinosaur with an ID of 'incorrect-id' cannot be found."
  */
-function getDinosaurDescription(dinosaurs, id) {}
+function getDinosaurDescription(dinosaurs, id) {
+  // console.log(dinosaurs);
+  // console.log(id);
+  let dinosaurName;
+  let dinosaurPronunciation;
+  let dinosaurInfo;
+  let dinosaurPeriod;
+  let dinosaurMYA;
+
+  if (id === "incorrect-id") {
+    return `A dinosaur with an ID of '${id}' cannot be found.`;
+  } else {
+    for (let i = 0; i < dinosaurs.length; i++) {
+      if (dinosaurs[i].dinosaurId === id) {
+        dinosaurName = dinosaurs[i].name;
+        dinosaurInfo = dinosaurs[i].info;
+        dinosaurPronunciation = dinosaurs[i].pronunciation;
+        dinosaurPeriod = dinosaurs[i].period;
+        dinosaurMYA = dinosaurs[i].mya[dinosaurs[i].mya.length - 1];
+
+        //console.log("Found the Dinosaur");
+      }
+    }
+    return `${dinosaurName} (${dinosaurPronunciation})\n${dinosaurInfo} It lived in the ${dinosaurPeriod} period, over ${dinosaurMYA} million years ago.`;
+  }
+}
 
 /**
  * getDinosaursAliveMya()
@@ -71,7 +129,56 @@ function getDinosaurDescription(dinosaurs, id) {}
  *  getDinosaursAliveMya(dinosaurs, 65, "unknown-key");
  *  //> ["WHQcpcOj0G"]
  */
-function getDinosaursAliveMya(dinosaurs, mya, key) {}
+function getDinosaursAliveMya(dinosaurs, mya, key) {
+  // console.log(mya);
+  // console.log(key);
+  let currentMYA;
+  let MYAFurthestYear;
+  let MYAClosestYear;
+  let wasAlive = [];
+
+  //----------------------------------------------------------//
+  if (key === "name") {
+    //If there is a key with name the get the name instead of ID
+    for (let i = 0; i < dinosaurs.length; i++) {
+      if (dinosaurs[i].mya.length === 2) {
+        // Two mya in array
+        MYAFurthestYear = dinosaurs[i].mya[0];
+        MYAClosestYear = dinosaurs[i].mya[1];
+        if (mya >= MYAClosestYear && mya <= MYAFurthestYear) {
+          wasAlive.push(dinosaurs[i].name);
+        }
+      } else if (dinosaurs[i].mya.length === 1) {
+        //only one mya in the array length
+        currentMYA = dinosaurs[i].mya[0];
+        if (currentMYA === mya || currentMYA === mya + 1) {
+          wasAlive.push(dinosaurs[i].name);
+        }
+      }
+    }
+  } else {
+    //any other situation with improper or no key return the ID
+    //------------------------------------------------------//
+    for (let i = 0; i < dinosaurs.length; i++) {
+      if (dinosaurs[i].mya.length === 2) {
+        // Two mya in array
+        MYAFurthestYear = dinosaurs[i].mya[0];
+        MYAClosestYear = dinosaurs[i].mya[1];
+        if (mya >= MYAClosestYear && mya <= MYAFurthestYear) {
+          wasAlive.push(dinosaurs[i].dinosaurId);
+        }
+      } else if (dinosaurs[i].mya.length === 1) {
+        //only one mya in the array length
+        currentMYA = dinosaurs[i].mya[0];
+        if (currentMYA === mya || currentMYA === mya + 1) {
+          wasAlive.push(dinosaurs[i].dinosaurId);
+        }
+      }
+    }
+  }
+
+  return wasAlive;
+}
 
 module.exports = {
   getLongestDinosaur,
