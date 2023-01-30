@@ -127,35 +127,16 @@ function calculateTicketPrice(ticketData, ticketInfo) {
     //> "Ticket type 'discount' cannot be found."
  */
 function purchaseTickets(ticketData, purchases) {
-    
-    var af = purchases.find(item => !['general','membership'].includes(item.ticketType))
-      if (af) return `Ticket type '${af.ticketType}' cannot be found.`
 
-    var bf = purchases.find(item => !['child','adult','senior'].includes(item.entrantType))
-    if (bf) return `Entrant type '${bf.entrantType}' cannot be found.`
-
-    for (var p of purchases) {
-      if (p.extras.length) {
-        var cf = p.extras.find(item => !['movie','education','terrace'].includes(item))
-        if (cf) return `Extra type '${cf}' cannot be found.`
-      }
-    }
-    //total price variable
     var res = 0
     //return string gets concatenated in a loop
     var rstring = `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------`
     for (var tm of purchases) {
-
-      var a = tm.ticketType
-      var b = tm.entrantType
-      var c = tm.extras
-      //subtotal variable
-      var ip = ticketData[a].priceInCents[b]
-      //build return string with business math
-      //calculate extras
-      for (var e of c) {
-        ip += ticketData.extras[e].priceInCents[b]
-      }
+      //use the other function for each element in purchases array
+      var ip = calculateTicketPrice(ticketData, tm)
+      //if string returns return string
+      if (typeof ip=='string') return ip
+      //accumulate TOTAL price
       res += ip
       if (tm.extras.length) var ts = ` (${tm.extras.map(item => {return item[0].toUpperCase()+item.substring(1)+' Access'}).join(', ')})`
       rstring += `\n${tm.entrantType[0].toUpperCase()+tm.entrantType.substring(1)} ${tm.ticketType[0].toUpperCase()+tm.ticketType.substring(1)} Admission: $${(ip/100).toFixed(2)}${ts??''}` 
