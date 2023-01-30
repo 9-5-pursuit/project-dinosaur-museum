@@ -54,7 +54,34 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  let tickTypeSought = ticketInfo.ticketType
+  let entrant = ticketInfo.entrantType
+  let extraArr = ticketInfo.extras
+  let extraCost = 0;
+  let ticketCost = 0;
+
+  if (!ticketData.hasOwnProperty(tickTypeSought)) {
+    return `Ticket type '${tickTypeSought}' cannot be found.`
+  } else if (!ticketData.general.priceInCents.hasOwnProperty(entrant)) {
+    return `Entrant type '${entrant}' cannot be found.`
+  } 
+
+  if (ticketInfo.extras.length !== 0) {
+    for (let ex of extraArr) {
+      // (!Object.keys(ticketData.extras).includes(ex))
+      if (!ticketData.extras.hasOwnProperty(ex)) {
+          return `Extra type '${ex}' cannot be found.`
+      }
+      
+      extraCost += ticketData.extras[ex].priceInCents[entrant]
+    }
+  }
+
+  ticketCost = ticketData[tickTypeSought].priceInCents[entrant]
+
+  return ticketCost + extraCost
+}
 
 /**
  * purchaseTickets()
@@ -109,7 +136,46 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function purchaseTickets(ticketData, purchases) {
+ 
+    let tickTypeSought = purchases[0].ticketType
+    let entrant = purchases[0].entrantType
+    let extraInfo = purchases[0].extras[0];
+    let total = 0;
+    let formatStr = ''
+    let upperStr = `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------`
+    let mainStr = ''
+    let lowerStr = `\n-------------------------------------------`
+    
+    // Iterating through each object, aka ticket
+    for (let i = 0; i < purchases.length; i++) {
+      let output = calculateTicketPrice(ticketData, purchases[i]) 
+      // first checking for errors
+      if (typeof output === 'string') return output;
+
+      tickTypeSought = purchases[i].ticketType;
+      entrant = purchases[i].entrantType
+      extraInfo = purchases[i].extras;
+    
+      // output is referring to each individual subtotal (Ex: Child Gen Admission with Movie extra)
+      total +=  output;
+
+        // When there are extras
+      if (purchases[i].extras.length) {
+        formatStr = ` (${purchases[i].extras.map(word => {return word[0].toUpperCase() + word.slice(1) + ` Access`}).join(", ")})`;
+      }
+
+      mainStr += `\n${entrant[0].toUpperCase() + entrant.slice(1)} ${tickTypeSought[0].toUpperCase() + tickTypeSought.slice(1)} Admission: $${(output/100).toFixed(2)}`
+      
+      if (formatStr) mainStr += formatStr;
+
+    }
+
+    let bottomStr = `\nTOTAL: $${(total/100).toFixed(2)}`
+
+    return upperStr + mainStr + lowerStr + bottomStr
+
+}
 
 // Do not change anything below this line.
 module.exports = {
