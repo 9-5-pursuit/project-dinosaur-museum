@@ -89,6 +89,7 @@ function getConnectedRoomNamesById(rooms, id) {
   const connectedRooms = [];
 
   for (const identifier of connectedRoomIds) {
+    // for the case of connected room id not existing
     if (!(roomIds.includes(identifier))) {
       return `Room with ID of '${identifier}' could not be found.`;
     }

@@ -61,6 +61,7 @@ function calculateTicketPrice(ticketData, ticketInfo) {
   let entrant = ticketInfo.entrantType
   let tExtras = ticketInfo.extras
 
+  // checking if ticketData holds the type and entrant given in ticketInfo
   if (ticketData[type] !== undefined && ticketData[type] !== "extras") {
     if (Object.keys(ticketData[type]["priceInCents"]).includes(entrant)) {
       ticketPrice += ticketData[type]["priceInCents"][entrant];
@@ -154,10 +155,12 @@ function purchaseTickets(ticketData, purchases) {
       return calculateTicketPrice(ticketData, purchase);
     }
 
+    // first letter of entrant capitalized
     entArr = purchase.entrantType.split('');
     entArr[0] = entArr[0].toUpperCase();
     formattedEnt = entArr.join('');
 
+    // ticketTypeF is ticket type descriptions
     purchaseObj.entrantTypeF = formattedEnt;
     purchaseObj.ticketTypeF = ticketData[purchase.ticketType].description;
     if (purchase.extras.length !== 0) {
@@ -176,33 +179,35 @@ function purchaseTickets(ticketData, purchases) {
   for (const p of purchaseObjects) {
     let formattedPrice = p.price / 100;
 
-    totalPrice += formattedPrice;
+    formattedPrice = Number(formattedPrice.toFixed(2));
+
+    // added a case for if the numbers are decimals even though all the prices currently evaluate to integers
+    if (formattedPrice % 1 !== 0) {
+      totalPrice += formattedPrice;
+    } else {
+      totalPrice += formattedPrice;
+      formattedPrice = String(formattedPrice) + '.00';
+    }
 
     if (p.extrasDesc.length !== 0) {
       if (p.extrasDesc.length > 1) {
-        receiptString += `\n${p.entrantTypeF} ${p.ticketTypeF}: $${formattedPrice}.00 (${p.extrasDesc.join(', ')})`;
+        receiptString += `\n${p.entrantTypeF} ${p.ticketTypeF}: $${formattedPrice} (${p.extrasDesc.join(', ')})`;
       } else {
-        receiptString += `\n${p.entrantTypeF} ${p.ticketTypeF}: $${formattedPrice}.00 (${p.extrasDesc[0]})`;
+        receiptString += `\n${p.entrantTypeF} ${p.ticketTypeF}: $${formattedPrice} (${p.extrasDesc[0]})`;
       }
     } else {
-      receiptString += `\n${p.entrantTypeF} ${p.ticketTypeF}: $${formattedPrice}.00`;
+      receiptString += `\n${p.entrantTypeF} ${p.ticketTypeF}: $${formattedPrice}`;
     }
   }
 
-  receiptString += `\n-------------------------------------------\nTOTAL: $${totalPrice}.00`;
+  if (totalPrice % 1 !== 0) {
+    receiptString += `\n-------------------------------------------\nTOTAL: $${totalPrice}`;
+  } else {
+    receiptString += `\n-------------------------------------------\nTOTAL: $${totalPrice}.00`;
+  }
 
   return receiptString;
 }
-
-const ticketInfo = [
-    {
-    ticketType: "general",
-    entrantType: "adult", // Incorrect
-    extras: ["movie"],
-  }
-];
-
-// purchaseTickets(exampleTicketData, ticketInfo)
 
 // Do not change anything below this line.
 module.exports = {

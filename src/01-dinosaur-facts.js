@@ -123,8 +123,10 @@ function getDinosaursAliveMya(dinosaurs, mya, key) {
   let dinoArr = [];
 
   for (const dino of dinosaurs) {
+    // if key given does not exist
     if (dino[key] === undefined) {
       if (dino.mya.length < 2) {
+        // if dino.mya has only 1 value
         if (dino.mya[0] >= mya - 1 && dino.mya[0] <= mya + 1) {
           dinoArr.push(dino.dinosaurId);
         }
