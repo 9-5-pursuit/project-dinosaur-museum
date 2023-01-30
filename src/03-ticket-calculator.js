@@ -54,7 +54,24 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  let admissionPrice = 0;
+  let age = ticketInfo.entrantType;
+  if (ticketInfo.ticketType === "membership") {
+    admissionPrice === tickets[membership][priceInCents][age];
+    console.log(admissionPrice);
+  }
+  // for (let i =)
+
+/*
+ ✕ ticket type does not match an existing ticket type 
+ ✕ entrant type does not match an existing entrant type
+ ✕ extra type does not match an existing extra type
+ ✕ should calculate a child general admission ticket without any addons (1 ms)
+ ✕ should calculate an adult general admission ticket without any addons
+ ✕ should calculate a senior general admission ticket without any addons
+  */
+}
 
 /**
  * purchaseTickets()

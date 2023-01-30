@@ -22,7 +22,32 @@ const exampleDinosaurData = require("../data/dinosaurs");
  *  getLongestDinosaur(dinosaurs);
  *  //> { Brachiosaurus: 98.43 }
  */
-function getLongestDinosaur(dinosaurs) {}
+function getLongestDinosaur(dinosaurs) {
+  let objValues = [];
+  if (dinosaurs.length === 0) {
+  console.log("No dinosaur data provided => {}");
+  return {};
+  } else {
+    const lengthOfLongest = Math.max(...dinosaurs.map(o => o.lengthInMeters)); // => finds the highest lengthInMeters value in the dinosaurs object. Once found, we can loop through the object to capture the dinosaurs data.
+    for (let i = 0; i < dinosaurs.length; i++) {
+      if (dinosaurs[i].lengthInMeters === lengthOfLongest) {
+        let longestDinoObj = dinosaurs[i];
+        objValues = (Object.values(longestDinoObj));
+        break;  // => once I match up lengthInMeters value with the dinosaur, I extract the object values into an array and then break from the loop.
+      }
+    }
+    console.log(objValues); 
+    let matchedDinoLength = {
+      [objValues[1]] : (objValues[5] * 3.281),
+    }; // => Added the name and lengthInMeters(converted to feet) values to a new object   
+    return matchedDinoLength; // => { Brachiosaurus: 98.43 }
+  }  
+/*
+- should return an object where the key is the tallest dinosaur name and the value is the length in feet
+- should return the first dinosaur if there are multiples with the same length
+- should return an empty object if there are no dinosaurs
+*/  
+}
 
 /**
  * getDinosaurDescription()
@@ -44,7 +69,23 @@ function getLongestDinosaur(dinosaurs) {}
  *  getDinosaurDescription(dinosaurs, "incorrect-id");
  *  //> "A dinosaur with an ID of 'incorrect-id' cannot be found."
  */
-function getDinosaurDescription(dinosaurs, id) {}
+function getDinosaurDescription(dinosaurs, id) {
+  for (let i = 0; i < dinosaurs.length; i++) {
+    if (dinosaurs[i].dinosaurId == id) {
+      console.log(dinosaurs[i].dinosaurId)
+      console.log("ID match found");
+      return (dinosaurs[i].name + " (" + dinosaurs[i].pronunciation + ")\n" + dinosaurs[i].info + " It lived in the " + dinosaurs[i].period + " period, over " + dinosaurs[i].mya.slice(-1) + " million years ago.");
+    } 
+  }
+  // => if no match is found the following statement is returned.
+  return "A dinosaur with an ID of '" + id + "' cannot be found."; 
+/*
+- should return a string description of a dinosaur, by ID
+- should work for dinosaurs with only one value in `mya`
+- should return an error message if the dinosaur cannot be found
+- should not mutate the original dinosaurs array
+*/
+}
 
 /**
  * getDinosaursAliveMya()
@@ -71,7 +112,175 @@ function getDinosaurDescription(dinosaurs, id) {}
  *  getDinosaursAliveMya(dinosaurs, 65, "unknown-key");
  *  //> ["WHQcpcOj0G"]
  */
-function getDinosaursAliveMya(dinosaurs, mya, key) {}
+function getDinosaursAliveMya(dinosaurs, mya, key) {
+  let arrayOfDinosaurs = [];
+    for (let i = 0; i < dinosaurs.length; i++) {
+      if (key === "name") {
+        if (dinosaurs[i].mya.length == 1) {
+          console.log("dinosaur has only one 'mya' index")
+          if (mya <= dinosaurs[i].mya[0] && (mya) >= ((dinosaurs[i].mya[0])-1)) { // => if the mya parameter is less than or equal to the single-index key value AND greater than or equal the same single index key value minus 1, if matched, then the dinosaurId is pushed to arrayOfDinosaurs.
+          arrayOfDinosaurs.push(dinosaurs[i].name);
+          console.log(arrayOfDinosaurs); 
+          }
+          continue; // after checking the single-index key, this sends it back to the loop to check the next dinosaur.
+        } else if (dinosaurs[i].mya.length == 2) {
+          if (mya <= dinosaurs[i].mya[0] && mya >= dinosaurs[i].mya[1]) {
+          // => if the array length is equal to two, it will check to see if the mya parameter value is less than or equal to mya[0] AND greater than mya[1]. If they match, then the dinosaurId is pushed to arrayOfDinosaurs.
+          console.log("dinosaur has two 'mya' indexes");
+          arrayOfDinosaurs.push(dinosaurs[i].name);  
+          console.log(arrayOfDinosaurs);     
+          continue; // after checking the double-index key, this sends it back to the loop to check the next dinosaur.
+          }
+        continue;
+        } 
+      }
+      if (key === "pronunciation") {
+        if (dinosaurs[i].mya.length == 1) {
+          console.log("dinosaur has only one 'mya' index")
+          if (mya <= dinosaurs[i].mya[0] && (mya) >= ((dinosaurs[i].mya[0])-1)) { // => if the mya parameter is less than or equal to the single-index key value AND greater than or equal the same single index key value minus 1, if matched, then the "pronunciation" is pushed to arrayOfDinosaurs.
+          arrayOfDinosaurs.push(dinosaurs[i].pronunciation);
+          console.log(arrayOfDinosaurs); 
+          }
+          continue; // after checking the single-index key, this sends it back to the loop to check the next dinosaur.
+        } else if (dinosaurs[i].mya.length == 2) {
+          if (mya <= dinosaurs[i].mya[0] && mya >= dinosaurs[i].mya[1]) {
+          // => if the array length is equal to two, it will check to see if the mya parameter value is less than or equal to mya[0] AND greater than mya[1]. If they match, then the "pronunciation" is pushed to arrayOfDinosaurs.
+          console.log("dinosaur has two 'mya' indexes");
+          arrayOfDinosaurs.push(dinosaurs[i].pronunciation);  
+          console.log(arrayOfDinosaurs);     
+          continue; // after checking the double-index key, this sends it back to the loop to check the next dinosaur.
+          }
+        continue;
+        } 
+      }
+      if (key === "meaningOfName") {
+        if (dinosaurs[i].mya.length == 1) {
+          console.log("dinosaur has only one 'mya' index")
+          if (mya <= dinosaurs[i].mya[0] && (mya) >= ((dinosaurs[i].mya[0])-1)) { // => if the mya parameter is less than or equal to the single-index key value AND greater than or equal the same single index key value minus 1, if matched, then the "meaningOfName" is pushed to arrayOfDinosaurs.
+          arrayOfDinosaurs.push(dinosaurs[i].meaningOfName);
+          console.log(arrayOfDinosaurs); 
+          }
+          continue; // after checking the single-index key, this sends it back to the loop to check the next dinosaur.
+        } else if (dinosaurs[i].mya.length == 2) {
+          if (mya <= dinosaurs[i].mya[0] && mya >= dinosaurs[i].mya[1]) {
+          // => if the array length is equal to two, it will check to see if the mya parameter value is less than or equal to mya[0] AND greater than mya[1]. If they match, then the "meaningOfName" is pushed to arrayOfDinosaurs.
+          console.log("dinosaur has two 'mya' indexes");
+          arrayOfDinosaurs.push(dinosaurs[i].meaningOfName);  
+          console.log(arrayOfDinosaurs);     
+          continue; // after checking the double-index key, this sends it back to the loop to check the next dinosaur.
+          }
+        continue;
+        } 
+      }
+      if (key === "diet") {
+        if (dinosaurs[i].mya.length == 1) {
+          console.log("dinosaur has only one 'mya' index")
+          if (mya <= dinosaurs[i].mya[0] && (mya) >= ((dinosaurs[i].mya[0])-1)) { // => if the mya parameter is less than or equal to the single-index key value AND greater than or equal the same single index key value minus 1, if matched, then value for "diet" is pushed to arrayOfDinosaurs.
+          arrayOfDinosaurs.push(dinosaurs[i].diet);
+          console.log(arrayOfDinosaurs); 
+          }
+          continue; // after checking the single-index key, this sends it back to the loop to check the next dinosaur.
+        } else if (dinosaurs[i].mya.length == 2) {
+          if (mya <= dinosaurs[i].mya[0] && mya >= dinosaurs[i].mya[1]) {
+          // => if the array length is equal to two, it will check to see if the mya parameter value is less than or equal to mya[0] AND greater than mya[1]. If they match, then the value for "diet" is pushed to arrayOfDinosaurs.
+          console.log("dinosaur has two 'mya' indexes");
+          arrayOfDinosaurs.push(dinosaurs[i].diet);  
+          console.log(arrayOfDinosaurs);     
+          continue; // after checking the double-index key, this sends it back to the loop to check the next dinosaur.
+          }
+        continue;
+        } 
+      }
+      if (key === "lengthInMeters") {
+        if (dinosaurs[i].mya.length == 1) {
+          console.log("dinosaur has only one 'mya' index")
+          if (mya <= dinosaurs[i].mya[0] && (mya) >= ((dinosaurs[i].mya[0])-1)) { // => if the mya parameter is less than or equal to the single-index key value AND greater than or equal the same single index key value minus 1, if matched, then value for "lengthInMeters" is pushed to arrayOfDinosaurs.
+          arrayOfDinosaurs.push(dinosaurs[i].lengthInMeters);
+          console.log(arrayOfDinosaurs); 
+          }
+          continue; // after checking the single-index key, this sends it back to the loop to check the next dinosaur.
+        } else if (dinosaurs[i].mya.length == 2) {
+          if (mya <= dinosaurs[i].mya[0] && mya >= dinosaurs[i].mya[1]) {
+          // => if the array length is equal to two, it will check to see if the mya parameter value is less than or equal to mya[0] AND greater than mya[1]. If they match, then the value for "lengthInMeters" is pushed to arrayOfDinosaurs.
+          console.log("dinosaur has two 'mya' indexes");
+          arrayOfDinosaurs.push(dinosaurs[i].lengthInMeters);  
+          console.log(arrayOfDinosaurs);     
+          continue; // after checking the double-index key, this sends it back to the loop to check the next dinosaur.
+          }
+        continue;
+        } 
+      }
+      if (key === "period") {
+        if (dinosaurs[i].mya.length == 1) {
+          console.log("dinosaur has only one 'mya' index")
+          if (mya <= dinosaurs[i].mya[0] && (mya) >= ((dinosaurs[i].mya[0])-1)) { // => if the mya parameter is less than or equal to the single-index key value AND greater than or equal the same single index key value minus 1, if matched, then value for "period" is pushed to arrayOfDinosaurs.
+          arrayOfDinosaurs.push(dinosaurs[i].period);
+          console.log(arrayOfDinosaurs); 
+          }
+          continue; // after checking the single-index key, this sends it back to the loop to check the next dinosaur.
+        } else if (dinosaurs[i].mya.length == 2) {
+          if (mya <= dinosaurs[i].mya[0] && mya >= dinosaurs[i].mya[1]) {
+          // => if the array length is equal to two, it will check to see if the mya parameter value is less than or equal to mya[0] AND greater than mya[1]. If they match, then the value for "period" is pushed to arrayOfDinosaurs.
+          console.log("dinosaur has two 'mya' indexes");
+          arrayOfDinosaurs.push(dinosaurs[i].period);  
+          console.log(arrayOfDinosaurs);     
+          continue; // after checking the double-index key, this sends it back to the loop to check the next dinosaur.
+          }
+        continue;
+        } 
+      }
+      if (key === "info") {
+        if (dinosaurs[i].mya.length == 1) {
+          console.log("dinosaur has only one 'mya' index")
+          if (mya <= dinosaurs[i].mya[0] && (mya) >= ((dinosaurs[i].mya[0])-1)) { // => if the mya parameter is less than or equal to the single-index key value AND greater than or equal the same single index key value minus 1, if matched, then value for "info" is pushed to arrayOfDinosaurs.
+          arrayOfDinosaurs.push(dinosaurs[i].info);
+          console.log(arrayOfDinosaurs); 
+          }
+          continue; // after checking the single-index key, this sends it back to the loop to check the next dinosaur.
+        } else if (dinosaurs[i].mya.length == 2) {
+          if (mya <= dinosaurs[i].mya[0] && mya >= dinosaurs[i].mya[1]) {
+          // => if the array length is equal to two, it will check to see if the mya parameter value is less than or equal to mya[0] AND greater than mya[1]. If they match, then the value for "info" is pushed to arrayOfDinosaurs.
+          console.log("dinosaur has two 'mya' indexes");
+          arrayOfDinosaurs.push(dinosaurs[i].info);  
+          console.log(arrayOfDinosaurs);     
+          continue; // after checking the double-index key, this sends it back to the loop to check the next dinosaur.
+          }
+        continue;
+        } 
+      } 
+      else {
+        if (dinosaurs[i].mya.length == 1) {
+          console.log("dinosaur has only one 'mya' index")
+          if (mya <= dinosaurs[i].mya[0] && (mya) >= ((dinosaurs[i].mya[0])-1)) { // => if the mya parameter is less than or equal to the single-index key value AND greater than or equal the same single index key value minus 1, if matched, then the dinosaurId is pushed to arrayOfDinosaurs.
+          arrayOfDinosaurs.push(dinosaurs[i].dinosaurId);
+          console.log(arrayOfDinosaurs); 
+          }
+          continue; // after checking the single-index key, this sends it back to the loop to check the next dinosaur.
+        } else if (dinosaurs[i].mya.length == 2) {
+          if (mya <= dinosaurs[i].mya[0] && mya >= dinosaurs[i].mya[1]) {
+          // => if the array length is equal to two, it will check to see if the mya parameter value is less than or equal to mya[0] AND greater than mya[1]. If they match, then the dinosaurId is pushed to arrayOfDinosaurs.
+          console.log("dinosaur has two 'mya' indexes");
+          arrayOfDinosaurs.push(dinosaurs[i].dinosaurId);  
+          console.log(arrayOfDinosaurs);     
+          continue; // after checking the double-index key, this sends it back to the loop to check the next dinosaur.
+          }
+        continue;
+        } 
+      }    
+    }
+    console.log(arrayOfDinosaurs);
+    return arrayOfDinosaurs;
+}
+/*
+******** tests that need to pass: ********
+- should return the IDs of all dinosaurs that were alive  approximately at the given time (1 ms)
+- should include dinosaurs with only one `mya` year (1 ms)
+- if the `mya` key is an array of one number, should allow for 1 MYA less than the amount
+- should return an empty array if the year does not match any
+- if the third argument is set, should replace the IDs with the value of the given key
+- if the third argument is set, but to a key that doesn't return a value, should return the IDs (1 ms)
+*/
+
 
 module.exports = {
   getLongestDinosaur,
