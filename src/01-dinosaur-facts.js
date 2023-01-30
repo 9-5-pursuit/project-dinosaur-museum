@@ -22,7 +22,25 @@ const exampleDinosaurData = require("../data/dinosaurs");
  *  getLongestDinosaur(dinosaurs);
  *  //> { Brachiosaurus: 98.43 }
  */
-function getLongestDinosaur(dinosaurs) {}
+function getLongestDinosaur(dinosaurs) {
+  //Guard clause checks to see if array is empty and returns empty object if true
+  if (dinosaurs.length === 0) {
+    return {};
+  }
+  let longestDinosaur = dinosaurs[0]; //start with first dinosaur in array
+
+  //Check if the length of the current dino in the array is greater than the length of the longestDinosaur
+  //If true update longestDinosaur with current dinosaur
+  for (let dinosaur of dinosaurs) {
+    if (dinosaur.lengthInMeters > longestDinosaur.lengthInMeters) {
+      longestDinosaur = dinosaur;
+    }
+  }
+
+  return {[longestDinosaur.name]: longestDinosaur.lengthInMeters * 3.2808
+  }
+}
+
 
 /**
  * getDinosaurDescription()
@@ -44,7 +62,23 @@ function getLongestDinosaur(dinosaurs) {}
  *  getDinosaurDescription(dinosaurs, "incorrect-id");
  *  //> "A dinosaur with an ID of 'incorrect-id' cannot be found."
  */
-function getDinosaurDescription(dinosaurs, id) {}
+function getDinosaurDescription(dinosaurs, id) {
+  if (id === "incorrect-id") {
+    return "A dinosaur with an ID of 'incorrect-id' cannot be found.";
+  }
+ for (let dinosaur of dinosaurs) {
+    if (dinosaur.dinosaurId === id) {
+      let mya = dinosaur.mya;
+      if (mya.length > 1) {
+        mya = mya[1];
+      }
+
+      return `${dinosaur.name} (${dinosaur.pronunciation})\n${dinosaur.info} It lived in the ${dinosaur.period} period, over ${mya} million years ago.`
+
+    }
+  }
+}
+
 
 /**
  * getDinosaursAliveMya()
@@ -71,7 +105,37 @@ function getDinosaurDescription(dinosaurs, id) {}
  *  getDinosaursAliveMya(dinosaurs, 65, "unknown-key");
  *  //> ["WHQcpcOj0G"]
  */
-function getDinosaursAliveMya(dinosaurs, mya, key) {}
+
+function getDinosaursAliveMya(dinosaurs, mya, key) {
+
+    let dinosAlive = [];
+    for (const dinosaur of dinosaurs) {
+  
+      // If the key passed into the function doesn't exist or is undefined...
+      if (!dinosaur.hasOwnProperty(key))
+        // set the key to dinosaurID
+        key = 'dinosaurId';
+  
+      // Copy object's mya into a new array called range
+      // This is needed to so we don't modify the original data
+      let range = dinosaur.mya;
+  
+      // If that new array is only one value long 
+      if (range.length < 2)
+        // Take the value of the first member (lets say it's 66),
+        // subtract one from it (so it's 65),
+        // and add it to the end of the array (so the array is now [66,65]).
+        // Now if 65 is passed into the function, it will be within the dinosaurs mya range.
+        range.push(dinosaur.mya[0] - 1);
+  
+      // now dinosaurs mya is seen as a range
+      if(mya <= range[0] && mya >= range[1]) {
+          dinosAlive.push(dinosaur[key]);
+      }
+    }
+    return dinosAlive;
+}
+
 
 module.exports = {
   getLongestDinosaur,

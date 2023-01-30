@@ -54,7 +54,24 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  
+  let ticket = ticketData[ticketInfo.ticketType];
+  if (!ticket) return `Ticket type '${ticketInfo.ticketType}' cannot be found.`;
+  
+  let price = ticket.priceInCents[ticketInfo.entrantType];
+  if (!price) return `Entrant type '${ticketInfo.entrantType}' cannot be found.`;
+  
+  let totalPrice = price;
+  
+  for (let extra of ticketInfo.extras) {
+    let extraCost = ticketData.extras[extra];
+    if (!extraCost) return `Extra type '${extra}' cannot be found.`;
+    totalPrice += extraCost.priceInCents[ticketInfo.entrantType];
+  }
+  
+  return totalPrice;
+}
 
 /**
  * purchaseTickets()
@@ -109,8 +126,31 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+  function purchaseTickets(ticketData, purchases) {
+    let receipt = `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------`;
+    let total = 0;
+    for (let ticket of purchases) {
+      let ticketPrice = calculateTicketPrice(ticketData, ticket);
+  
+      if (typeof ticketPrice === 'string')
+        return ticketPrice;
+  
+      receipt += `\n${(ticket.entrantType.charAt(0).toUpperCase() + ticket.entrantType.slice(1))} ${ticketData[ticket.ticketType].description}: $${(ticketPrice / 100).toFixed(2)}`;
+  
+      if (ticket.extras.length > 0) {
+        let extras = [];
+        for (let extra of ticket.extras)
+          extras.push(ticketData.extras[extra].description);
+  
+        receipt += ` (${extras.join(', ')})`;
+      }
+  
+      total += ticketPrice;
+    }
+    
+    return receipt + `\n-------------------------------------------\nTOTAL: $${(total / 100).toFixed(2)}`;
 
+  }
 // Do not change anything below this line.
 module.exports = {
   calculateTicketPrice,
