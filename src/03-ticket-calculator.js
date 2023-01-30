@@ -54,7 +54,46 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  // Check if the ticketData object has a property that matches the ticketType in the ticketInfo object
+  // and if that property has a property of priceInCents that matches the entrantType in the ticketInfo object
+  if (
+    ticketData.hasOwnProperty(ticketInfo.ticketType) &&
+    ticketData[ticketInfo.ticketType].priceInCents.hasOwnProperty(
+      ticketInfo.entrantType
+    )
+  ) {
+    let extrasPrice = 0;
+
+    // Iterate through the extras array in the ticketInfo object
+    for (let index in ticketInfo.extras) {
+      // Check if the extras can be found in the ticketData object
+      if (ticketData.extras.hasOwnProperty(ticketInfo.extras[index]))
+        extrasPrice +=
+          ticketData.extras[ticketInfo.extras[index]].priceInCents[
+            ticketInfo.entrantType
+          ];
+      // If extra type cannot be found return a string with the invalid extra
+      else return `Extra type '${ticketInfo.extras}' cannot be found.`;
+    } // ends forLoop searching for 'extras'
+
+    // Return the sum of the priceInCents for the ticketType and entrantType and the extrasPrice
+    return (
+      ticketData[ticketInfo.ticketType].priceInCents[ticketInfo.entrantType] +
+      extrasPrice
+    );
+  }
+  // If the ticketType cannot be found in the ticketData object, return a string with the invalid type
+  else if (!ticketData.hasOwnProperty(ticketInfo.ticketType))
+    return `Ticket type '${ticketInfo.ticketType}' cannot be found.`;
+  // If the entrantType cannot be found in the ticketData object, return a string with the invalid type
+  else if (
+    !ticketData[ticketInfo.ticketType].priceInCents.hasOwnProperty(
+      ticketInfo.entrantType
+    )
+  )
+    return `Entrant type '${ticketInfo.entrantType}' cannot be found.`;
+}
 
 /**
  * purchaseTickets()
@@ -109,7 +148,60 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function purchaseTickets(ticketData, purchases) {
+  // Initialize totalPrice variable to keep track of the total cost of all purchases
+  let totalPrice = 0;
+
+  // Initialize receipt variable to store the receipt information
+  let receipt =
+    "Thank you for visiting the Dinosaur Museum!\n-------------------------------------------";
+
+  // Iterate over all purchases
+  for (let index in purchases) {
+    // Call calculateTicketPrice function to get the price of the current purchase
+    let calPrice = calculateTicketPrice(ticketData, purchases[index]);
+
+    // If the returned value from calculateTicketPrice is a string, return the error message
+    if (typeof calPrice === "string") return calPrice;
+
+    // Convert the price from cents to dollars
+    calPrice = calPrice / 100;
+
+    // Add the current purchase information to the receipt variable
+    receipt += `\n${purchases[index].entrantType[0].toUpperCase()}${purchases[
+      index
+    ].entrantType
+      .slice(1)
+      .toLowerCase()} ${purchases[
+      index
+    ].ticketType[0].toUpperCase()}${purchases[index].ticketType
+      .slice(1)
+      .toLowerCase()} Admission: `;
+    receipt += `$${calPrice.toFixed(2)}`;
+
+    // If the purchase includes extras, add the extras information to the receipt variable
+    if (purchases[index].extras.length >= 1)
+      receipt += ` (${purchases[index].extras
+        .map(
+          (element) =>
+            `${element.charAt(0).toUpperCase()}${element
+              .slice(1)
+              .toLowerCase()}`
+        )
+        .join(" Access, ")} Access)`;
+
+    // Add the current purchase price to the totalPrice variable
+    totalPrice += calPrice;
+  }
+
+  // Add the total price information to the receipt variable
+  receipt += `\n-------------------------------------------\nTOTAL: $${totalPrice.toFixed(
+    2
+  )}`;
+
+  // Return the final receipt
+  return receipt;
+}
 
 // Do not change anything below this line.
 module.exports = {

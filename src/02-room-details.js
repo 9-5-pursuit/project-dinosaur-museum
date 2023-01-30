@@ -25,7 +25,29 @@ const exampleRoomData = require("../data/rooms");
  *  getRoomByDinosaurName(dinosaurs, rooms, "Pterodactyl");
  *  //> "Dinosaur with name 'Pterodactyl' cannot be found."
  */
-function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
+const getRoomByDinosaurName = (dinosaurs, rooms, dinosaurName) => {
+  // use map to store the id and name of each dinosaur for efficient lookup
+  const dinoMap = dinosaurs.reduce((acc, dino) => {
+    acc[dino.name] = dino.dinosaurId;
+    return acc;
+  }, {});
+
+  // check if the dinosaur is in the map
+  if (!dinoMap[dinosaurName]) {
+    return `Dinosaur with name '${dinosaurName}' cannot be found.`;
+  }
+
+  // check if the dinosaurId is in any of the rooms
+  const roomFound = rooms.find((room) =>
+    room.dinosaurs.includes(dinoMap[dinosaurName])
+  );
+
+  if (roomFound) {
+    return roomFound.name;
+  }
+
+  return `Dinosaur with name '${dinosaurName}' cannot be found in any rooms.`;
+};
 
 /**
  * getConnectedRoomNamesById()
@@ -49,7 +71,36 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
       "Kit Hopkins Education Wing"
     ]
  */
-function getConnectedRoomNamesById(rooms, id) {}
+const getConnectedRoomNamesById = (rooms, id) => {
+  // Find room with matching roomId
+  const roomFound = rooms.find((room) => room.roomId === id);
+
+  // Return error message if room is not found
+  if (!roomFound) return `Room with ID of '${id}' could not be found.`;
+
+  // Initialize errors array
+  let errors = [];
+  // Get ids of rooms that the room with matching id connects to
+  const connRooms = roomFound.connectsTo.map((roomId) => {
+    // Find room with matching roomId
+    const room = rooms.find((r) => r.roomId === roomId);
+    // Return error message if room is not found
+    if (!room) {
+      errors.push(`Room with ID of '${roomId}' could not be found.`);
+    } else {
+      // Return name of room if room is found
+      return room.name;
+    }
+  });
+
+  // If errors array has any elements, return error message as a string
+  if (errors.length > 0) {
+    return errors.join(", ");
+  } else {
+    // Return array of room names
+    return connRooms;
+  }
+};
 
 module.exports = {
   getRoomByDinosaurName,
