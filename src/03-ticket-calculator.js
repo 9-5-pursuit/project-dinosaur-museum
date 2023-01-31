@@ -143,17 +143,13 @@ function purchaseTickets(ticketData, purchases) {
   const receiptIntro = `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\n`;
   let lineItem = "";
   let receipt = "";
-  console.log(purchases)
   for (let i = 0; i < purchases.length; i++) {
     let price = calculateTicketPrice(ticketData, purchases[i]);
     if (typeof price !== "number") {
       return price;
     }
-    // console.log(price);
 
     total += price;
-
-    // console.log(total);
 
     let purType = purchases[i].ticketType;
 
@@ -190,16 +186,13 @@ function purchaseTickets(ticketData, purchases) {
   let bottomOfRec = `-------------------------------------------\nTOTAL: $${(
     total / 100
   ).toFixed(2)}`;
-  // console.log(lineItem);
+
 
   receipt = receiptIntro + lineItem + bottomOfRec;
-  console.log(receipt)
+  
   return receipt;
 }
-// let receiptOutro = `-------------------------------------------
-// TOTAL: $${(total / 100).toFixed(2)}`;
-//   let receipt = receiptIntro + lineItem + receiptOutro;
-//   return receipt;
+
 
 // Do not change anything below this line.
 module.exports = {
