@@ -25,7 +25,25 @@ const exampleRoomData = require("../data/rooms");
  *  getRoomByDinosaurName(dinosaurs, rooms, "Pterodactyl");
  *  //> "Dinosaur with name 'Pterodactyl' cannot be found."
  */
-function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
+function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
+let ids = '';
+
+for(let i = 0; i < dinosaurs.length; i++) {
+  if(dinosaurs[i].name === dinosaurName) {
+    ids = dinosaurs[i].dinosaurId
+  }
+   }
+if(!ids){
+  return `Dinosaur with name '${dinosaurName}' cannot be found.` 
+
+} 
+   for(let j = 0; j < rooms.length; j++) {
+  if(rooms[j].dinosaurs.includes(ids)) {
+    return rooms[j].name;
+  }
+}
+return `Dinosaur with name '${dinosaurName}' cannot be found in any rooms.`
+}
 
 /**
  * getConnectedRoomNamesById()
@@ -49,9 +67,55 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
       "Kit Hopkins Education Wing"
     ]
  */
-function getConnectedRoomNamesById(rooms, id) {}
+function getConnectedRoomNamesById(rooms, id) {
 
+
+let idFound = false;
+let arr = [];
+let roomNames = [];
+let correctRooms = [];
+let incorrectId = [];
+for (let i = 0; i < rooms.length; i++){
+  if(rooms[i].roomId === id){
+    idFound = true;
+    for (let a = 0; a < rooms[i].connectsTo.length; a++){
+      arr.push(rooms[i].connectsTo[a])
+    }
+  }
+}
+if (!idFound){
+  return `Room with ID of '${id}' could not be found.`
+}
+for (let b = 0; b < arr.length; b++ ){
+  for(let c = 0; c < rooms.length; c++){
+    if (arr[b] === rooms[c].roomId){
+      roomNames.push(rooms[c].name);
+      correctRooms.push(arr[b]);
+    }
+  }
+}
+for (let d = 0; d < arr.length; d++) {
+  let found = false;
+  for (let e = 0; e < correctRooms.length; e++) {
+    if (arr[d] === correctRooms[e]) {
+      found = true;
+      break;
+    }
+  }
+  if (!found) {
+    incorrectId.push(arr[d]);
+  }
+}
+if (incorrectId.length) {
+  return `Room with ID of '${incorrectId[0]}' could not be found.`
+}
+return roomNames;
+}
 module.exports = {
   getRoomByDinosaurName,
   getConnectedRoomNamesById,
 };
+
+
+
+
