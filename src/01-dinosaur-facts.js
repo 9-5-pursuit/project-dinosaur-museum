@@ -23,20 +23,21 @@ const exampleDinosaurData = require("../data/dinosaurs");
  *  //> { Brachiosaurus: 98.43 }
  */
 function getLongestDinosaur(dinosaurs) {
-  //Guard clause checks to see if array is empty and returns empty object if true
+  // Guard clause checks to see if array is empty and returns empty object if true
   if (dinosaurs.length === 0) {
     return {};
   }
-  let longestDinosaur = dinosaurs[0]; //start with first dinosaur in array
+  // Starts with first dinosaur object in `dinosaurs` array
+  let longestDinosaur = dinosaurs[0]; 
 
-  //Check if the length of the current dino in the array is greater than the length of the longestDinosaur
-  //If true update longestDinosaur with current dinosaur
+  // Checks if the length of the current dino in the array is greater than the length of the `longestDinosaur`
+  // If true, updates `longestDinosaur` object with current dinosaur
   for (let dinosaur of dinosaurs) {
     if (dinosaur.lengthInMeters > longestDinosaur.lengthInMeters) {
       longestDinosaur = dinosaur;
     }
   }
-
+  // Converts the length of the longest dinosaur to feet before returning object
   return {[longestDinosaur.name]: longestDinosaur.lengthInMeters * 3.2808
   }
 }
@@ -63,16 +64,18 @@ function getLongestDinosaur(dinosaurs) {
  *  //> "A dinosaur with an ID of 'incorrect-id' cannot be found."
  */
 function getDinosaurDescription(dinosaurs, id) {
+  // Guard clause checks to see if `incorrect id` is passed and returns error message if true
   if (id === "incorrect-id") {
     return "A dinosaur with an ID of 'incorrect-id' cannot be found.";
   }
- for (let dinosaur of dinosaurs) {
-    if (dinosaur.dinosaurId === id) {
+ // Loops through `dinosaurs` array
+  for (let dinosaur of dinosaurs) {
+    if (dinosaur.dinosaurId === id) { // Checks if ids match
       let mya = dinosaur.mya;
-      if (mya.length > 1) {
+      if (mya.length > 1) { // Nested if statement checks how many elements are in `mya` array and sets value to second element if more than one is in there
         mya = mya[1];
       }
-
+      // Returns string with dynamic values describing specific dinosaur's information
       return `${dinosaur.name} (${dinosaur.pronunciation})\n${dinosaur.info} It lived in the ${dinosaur.period} period, over ${mya} million years ago.`
 
     }
@@ -107,29 +110,31 @@ function getDinosaurDescription(dinosaurs, id) {
  */
 
 function getDinosaursAliveMya(dinosaurs, mya, key) {
-
+  // Declare empty array to pass living dinos into once found
     let dinosAlive = [];
-    for (const dinosaur of dinosaurs) {
+    // Loops through `dinosaurs` array
+    for (let dinosaur of dinosaurs) {
   
-      // If the key passed into the function doesn't exist or is undefined...
+      // If the key passed into the function doesn't exist or is undefined
       if (!dinosaur.hasOwnProperty(key))
-        // set the key to dinosaurID
+        // set the key to `dinosaurID`
         key = 'dinosaurId';
   
-      // Copy object's mya into a new array called range
-      // This is needed to so we don't modify the original data
+      // Copy object's `mya` into a new array called `range`
+      // This is needed so original data is not modified
       let range = dinosaur.mya;
   
-      // If that new array is only one value long 
+      // If new array is only one element long 
       if (range.length < 2)
-        // Take the value of the first member (lets say it's 66),
-        // subtract one from it (so it's 65),
-        // and add it to the end of the array (so the array is now [66,65]).
-        // Now if 65 is passed into the function, it will be within the dinosaurs mya range.
+        // Take the single element (e.g. 66),
+        // Subtract one from it (66 => 65),
+        // Add it to the end of the `range` array (so the array is now [66, 65]).
+        // If 65 is passed into the function, it will be within the dinosaur's `mya` range
         range.push(dinosaur.mya[0] - 1);
   
-      // now dinosaurs mya is seen as a range
-      if(mya <= range[0] && mya >= range[1]) {
+      // Now dinosaurs `mya` is seen as a range
+      // If `mya` falls within the `range`, add `dinosaurId` to `dinosAlive` array
+      if (mya <= range[0] && mya >= range[1]) {
           dinosAlive.push(dinosaur[key]);
       }
     }

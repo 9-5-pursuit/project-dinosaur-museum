@@ -38,7 +38,7 @@ const exampleTicketData = require("../data/tickets");
  *  
  * EXAMPLE:
  *  const ticketInfo = {
-      ticketType: "membership",
+      ticketType: "membership", 
       entrantType: "child",
       extras: ["movie"],
     };
@@ -55,21 +55,29 @@ const exampleTicketData = require("../data/tickets");
     //> "Entrant type 'kid' cannot be found."
  */
 function calculateTicketPrice(ticketData, ticketInfo) {
-  
+  // Grab ticket type from the `ticketData` object being passed into function
   let ticket = ticketData[ticketInfo.ticketType];
+  // If ticket type does not match an existing ticket type, return error message
   if (!ticket) return `Ticket type '${ticketInfo.ticketType}' cannot be found.`;
   
+  // Grab price based on age from the `ticketInfo` object being passed into function
   let price = ticket.priceInCents[ticketInfo.entrantType];
+  // If entrant type does not match an existing entrant type, return error message
   if (!price) return `Entrant type '${ticketInfo.entrantType}' cannot be found.`;
   
+  // Set price before final calculation at base price of ticket
   let totalPrice = price;
   
+  // Loop through `ticketInfo.extras`
   for (let extra of ticketInfo.extras) {
+    // Store cost of specific extra
     let extraCost = ticketData.extras[extra];
+    // If extra type does not match an existing extra type, return error message
     if (!extraCost) return `Extra type '${extra}' cannot be found.`;
+    // Add extras cost to `totalPrice`
     totalPrice += extraCost.priceInCents[ticketInfo.entrantType];
   }
-  
+  // Return final price as number
   return totalPrice;
 }
 
@@ -127,27 +135,38 @@ function calculateTicketPrice(ticketData, ticketInfo) {
     //> "Ticket type 'discount' cannot be found."
  */
   function purchaseTickets(ticketData, purchases) {
+    // Start the receipt with a string
     let receipt = `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------`;
+    
+    // Set total price at default before adding cost
     let total = 0;
+    
+    // Loop through `purchases` array passed into function
     for (let ticket of purchases) {
+      // Calculate ticket price by using function created for last problem
       let ticketPrice = calculateTicketPrice(ticketData, ticket);
-  
+      
+      // Should surface errors from calculateTicketPrice()
       if (typeof ticketPrice === 'string')
         return ticketPrice;
   
+      // Add ticket info to receipt with correct formatting
       receipt += `\n${(ticket.entrantType.charAt(0).toUpperCase() + ticket.entrantType.slice(1))} ${ticketData[ticket.ticketType].description}: $${(ticketPrice / 100).toFixed(2)}`;
   
+      // Check if ticket has any extras
       if (ticket.extras.length > 0) {
+        // Creat empty array to hold extras
         let extras = [];
+        // Loop through `extras` array in purchases and add descriptions to empty array
         for (let extra of ticket.extras)
           extras.push(ticketData.extras[extra].description);
-  
+        // Add `extras` info to receipt
         receipt += ` (${extras.join(', ')})`;
       }
-  
+      // Add ticket price to total cost
       total += ticketPrice;
     }
-    
+    // Returns a full receipt as a string, with each individual ticket bought and the total cost
     return receipt + `\n-------------------------------------------\nTOTAL: $${(total / 100).toFixed(2)}`;
 
   }
