@@ -54,7 +54,26 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+/**
+ * In this function I set up a variable I called cost to return at the end. I set up 2 if statements for if the ticket can't be found or if the entrant can't be found. the cost is then calculated from ticketData, the given object, and any extras are checked for existing inside a for loop. after that the total cost is calculated since we need to add on extras now and then we return the total cost at the end.
+ */
+    function calculateTicketPrice(ticketData, ticketInfo) {
+      let cost = 0;
+      if (ticketInfo.ticketType !== "general" && ticketInfo.ticketType !== "membership") {
+        return `Ticket type '${ticketInfo.ticketType}' cannot be found.`;
+      }
+      if (ticketInfo.entrantType !== "child" && ticketInfo.entrantType !== "adult" && ticketInfo.entrantType !== "senior") {
+        return `Entrant type '${ticketInfo.entrantType}' cannot be found.`;
+      }
+      cost += ticketData[`${ticketInfo.ticketType}`].priceInCents[`${ticketInfo.entrantType}`];
+      for (let i = 0; i < ticketInfo.extras.length; i++) {
+        if (ticketInfo.extras[i] !== "movie" && ticketInfo.extras[i] !== "education" && ticketInfo.extras[i] !== "terrace") {
+          return `Extra type '${ticketInfo.extras[i]}' cannot be found.`;
+        }
+        cost += ticketData.extras[`${ticketInfo.extras[i]}`].priceInCents[`${ticketInfo.entrantType}`];
+      }
+      return cost;
+    }
 
 /**
  * purchaseTickets()
@@ -109,7 +128,44 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+/**
+ * This was a doozy. I set up multiple variables for the amount of string manipulation that will need to take place just to make things easier on myself. Sorry if it looks chaotic. I set up a for loop to check if the cost is a number when it comes in from the previous function and if it is not then we return the cost. if it is a number we add it to total cost. the i set up a way to capitalize the first and second words appropriately and stored them in item. by the end the whole receipt is made.
+ */
+function purchaseTickets(ticketData, purchases) {
+  let totalCost = 0;
+  const receiptGreeting = `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\n`;
+  let item = "";
+  let receipt = "";
+
+  for (let i = 0; i < purchases.length; i++) {
+    let cost = calculateTicketPrice(ticketData, purchases[i]);
+    if (typeof cost !== "number") {
+      return cost;
+    }
+    totalCost += cost;
+
+    let entrant = `${purchases[i].entrantType}`;
+    let capitalizeEntrant = entrant.charAt(0).toUpperCase() + entrant.slice(1);
+    let ticket = `${purchases[i].ticketType}`;
+    let capitalizeTicket = ticket.charAt(0).toUpperCase() + ticket.slice(1);
+    item += `${capitalizeEntrant} ${capitalizeTicket} Admission: $${(cost / 100).toFixed(2)}`;
+
+    if (purchases[i].extras.length > 0) {
+      let extraAccess = "";
+      for (let j = 0; j < purchases[i].extras.length; j++) {
+        extraAccess += ticketData.extras[`${purchases[i].extras[j]}`].description;
+        if (j !== purchases[i].extras.length - 1) {
+          extraAccess += ", ";
+        }
+      }
+      item += ` (${extraAccess})`;
+    }
+    item += "\n";
+  }
+  let bottomOfReceipt = `-------------------------------------------\nTOTAL: $${(totalCost / 100).toFixed(2)}`;
+  receipt = receiptGreeting + item + bottomOfReceipt;
+  return receipt;
+}
 
 // Do not change anything below this line.
 module.exports = {
