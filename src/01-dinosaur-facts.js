@@ -22,7 +22,29 @@ const exampleDinosaurData = require("../data/dinosaurs");
  *  getLongestDinosaur(dinosaurs);
  *  //> { Brachiosaurus: 98.43 }
  */
-function getLongestDinosaur(dinosaurs) {}
+function getLongestDinosaur(dinosaurs) {
+  //* 1)
+  const maxLength = Math.max(...dinosaurs.map(d => d.lengthInMeters));
+  Number.prototype.toFeet = function() { // * 2) 
+    return Number((this * 3.281).toFixed(2))
+  };
+
+  if (dinosaurs.length < 1) { 
+    return {}; // * 3)
+  };
+  for (const {name, lengthInMeters} of dinosaurs) {  //* 4)
+    if ((typeof maxLength) && (maxLength === lengthInMeters)) {
+      return ({[name] : maxLength.toFeet()});
+    };
+  };
+};
+/** FOOTNOTE DETAILS:
+ * 1) call array.map to return target() => spread values[target] into Math.max => returns maxValue
+ * 2) extend prototype[Number] into custom method => easy meter-to-feet conversion
+ * 3) Edge case: !!dinosaurs => empty object.
+ * 4) object destructuring => unpack props[target] as args in loop param => easy access
+ */
+console.log(getLongestDinosaur(exampleDinosaurData));
 
 /**
  * getDinosaurDescription()
@@ -35,7 +57,7 @@ function getLongestDinosaur(dinosaurs) {}
  *
  * @param {Object[]} dinosaurs - An array of dinosaur objects. See the `data/dinosaurs.js` file for an example of the input.
  * @param {string} id - The unique identifier for the dinosaur.
- * @returns {string} A detailed description of the dinosaur.
+ * @returns {string} - A detailed description of the dinosaur.
  *
  * EXAMPLE:
  *  getDinosaurDescription(dinosaurs, "U9vuZmgKwUr");
@@ -44,7 +66,7 @@ function getLongestDinosaur(dinosaurs) {}
  *  getDinosaurDescription(dinosaurs, "incorrect-id");
  *  //> "A dinosaur with an ID of 'incorrect-id' cannot be found."
  */
-function getDinosaurDescription(dinosaurs, id) {}
+function getDinosaurDescription(dinosaurs, id) {};
 
 /**
  * getDinosaursAliveMya()
@@ -71,7 +93,7 @@ function getDinosaurDescription(dinosaurs, id) {}
  *  getDinosaursAliveMya(dinosaurs, 65, "unknown-key");
  *  //> ["WHQcpcOj0G"]
  */
-function getDinosaursAliveMya(dinosaurs, mya, key) {}
+function getDinosaursAliveMya(dinosaurs, mya, key) {};
 
 module.exports = {
   getLongestDinosaur,

@@ -1,13 +1,16 @@
-{
+ {
   "name": "8-0-dinosaur-museum-project",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "jest --runInBand",
-    "watch": "jest --watchAll"
-  },
-  "keywords": [],
+    "watch": "jest --watchAll",
+    "test-01": "jest --watchAll ./__tests__/01-dinosaur-facts.test.js",
+    "test-02": "jest --watchAll ./__tests__/02-room-details.test.js", 
+    "test-03": "jest --watchAll ./__tests__/03-ticket-calculator.test.js"
+ },
+  "keywords": [], 
   "author": "",
   "license": "ISC",
   "devDependencies": {
