@@ -99,7 +99,7 @@ function getConnectedRoomNamesById(rooms, id) {
   }
   // to check for incorrect connected room ID's, I'm comparing the length of the input and output arrays. If they are not equal, then one of the id's was invalid. 
   if (roomNamesArray.length !== connectsToArray.length) {
-    return "Room with ID of 'incorrect-id' could not be found."
+    return "Room with ID of 'incorrect-id' could not be found.";
   } else {
     return roomNamesArray;
   }
