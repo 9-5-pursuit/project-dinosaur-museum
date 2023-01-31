@@ -54,7 +54,26 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  const { ticketType, entrantType, extras}= ticketInfo; 
+  const ticketPrices = ticketData[ticketType];
+  if (!ticketPrices) {
+    return `Ticket type '${ticketType}' cannot be found.`;
+  }
+  const ticketPrice = ticketPrices[entrantType];
+  if (!ticketPrice) {
+    return `Entrant type '${entrantType}' cannot be found.`;
+  }
+  let totalPrice = ticketPrice;
+  for (const extra of extras) {
+    const extraPrice = ticketData.extras[extra];
+    if (!extraPrice) {
+      return `Extra '${extra}' cannot be found.`;
+    }
+    totalPrice += extraPrice;
+  }
+  return totalPrice;
+}
 
 /**
  * purchaseTickets()
@@ -109,7 +128,30 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+    
+    function purchaseTickets(ticketData, purchases) {
+      let receipt = "Thank you for visiting the Dinosaur Museum!\n";
+      let line = "-------------------------------------------\n";
+      let total = 0;
+      for (let purchase of purchases) {
+        let { ticketType, entrantType, extras } = purchase;
+        let ticketPrice = calculateTicketPrice(ticketData, ticketType, entrantType, extras);
+        if (ticketPrice === "Ticket type '" + ticketType + "' cannot be found.") {
+          return ticketPrice;
+        }
+        if (ticketPrice === "Entrant type '" + entrantType + "' cannot be found.") {
+          return ticketPrice;
+        }
+        total += ticketPrice;
+        receipt +=
+          entrantType.charAt(0).toUpperCase() + entrantType.slice(1) + " " + ticketType + " Admission: $" + ticketPrice.toFixed(2) + "\n";
+      }
+      receipt += line + "TOTAL: $" + total.toFixed(2);
+      return receipt;
+
+   }
+    
+    
 
 // Do not change anything below this line.
 module.exports = {
