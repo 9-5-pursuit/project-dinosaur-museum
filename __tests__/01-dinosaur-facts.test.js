@@ -87,7 +87,7 @@ describe("getDinosaurDescription()", () => {
       pronunciation: "AL-oh-sore-us",
       meaningOfName: "other lizard",
       diet: "carnivorous",
-      lengthInMeters: 12,
+      
       period: "Late Jurassic",
       mya: [156, 144],
       info: "Allosaurus was an apex predator in the Late Jurassic in North America.",
