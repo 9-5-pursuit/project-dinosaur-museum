@@ -22,7 +22,32 @@ const exampleDinosaurData = require("../data/dinosaurs");
  *  getLongestDinosaur(dinosaurs);
  *  //> { Brachiosaurus: 98.43 }
  */
-function getLongestDinosaur(dinosaurs) {}
+function getLongestDinosaur(dinosaurs) {
+  //should return an empty object if there are no dinosaurs
+  if (dinosaurs.length === 0 ) {
+    return {};
+  }
+  //set up variables to hold the values im looking for 
+  let dino = dinosaurs[0].lengthInMeters * 3.281;
+
+  let saur1 = dinosaurs[0].name;
+
+  // console.log(saur1);
+  //created a loop that sorts through the dinosaur object array and replaces my variables above with the longest dinosuar's name and length
+  for (let i = 1; i < dinosaurs.length; i++) {
+    let dinosaur = dinosaurs[i].lengthInMeters * 3.281;
+    let saur = dinosaurs[i].name
+    if (dinosaur > dino) {
+      dino = dinosaur, saur1 = saur;
+    } else continue;
+  }
+  // created an object to hold my new property
+  const longDino = { [saur1] : dino};
+ 
+  // returned that object
+  return longDino;
+  
+} 
 
 /**
  * getDinosaurDescription()
@@ -44,7 +69,29 @@ function getLongestDinosaur(dinosaurs) {}
  *  getDinosaurDescription(dinosaurs, "incorrect-id");
  *  //> "A dinosaur with an ID of 'incorrect-id' cannot be found."
  */
-function getDinosaurDescription(dinosaurs, id) {}
+function getDinosaurDescription(dinosaurs, id) {
+  //creating my first if statement to return an error message if incorrect-id is entered
+  if (id === "incorrect-id") {
+    return "A dinosaur with an ID of 'incorrect-id' cannot be found.";
+  }
+  //created a variable to hold the string value i want to return
+let din = `${dinosaurs[0].name + (dinosaurs[0].pronunciation) + dinosaurs[0].info}`;
+// created for loop to search through the objects and get the values that i want
+for (let i = 0; i < dinosaurs.length; i++) {
+  //ternary to search through millions of years array and return different values based on length
+let mya2 = dinosaurs[i].mya.length;
+let mya = mya2 >= 2 ? dinosaurs[i].mya[1]: dinosaurs[i].mya[0];
+let time = mya2 >= 2 ? `Early` : `Late`;
+// if statement that prints out a string if id is matched
+if (id === dinosaurs[i].dinosaurId) {
+    din = `${`${dinosaurs[i].name} (${dinosaurs[i].pronunciation})\n${dinosaurs[i].info}`} It lived in the ${time} Cretaceous period, over ${mya} million years ago.`;
+  }
+
+}
+
+     return din;
+
+}
 
 /**
  * getDinosaursAliveMya()
@@ -71,7 +118,17 @@ function getDinosaurDescription(dinosaurs, id) {}
  *  getDinosaursAliveMya(dinosaurs, 65, "unknown-key");
  *  //> ["WHQcpcOj0G"]
  */
-function getDinosaursAliveMya(dinosaurs, mya, key) {}
+function getDinosaursAliveMya(dinosaurs, mya, key) {
+
+let dino_Array =[];
+for (let i = 0; i < dinosaurs.length; i++){
+if ("Late Jurrassic" === dinosaurs[i].period) {
+  dino_Array.push(dinosaurs[i].dinosaurId)
+}
+}
+return dino_Array;
+
+}
 
 module.exports = {
   getLongestDinosaur,
