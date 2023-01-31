@@ -25,7 +25,24 @@ const exampleRoomData = require("../data/rooms");
  *  getRoomByDinosaurName(dinosaurs, rooms, "Pterodactyl");
  *  //> "Dinosaur with name 'Pterodactyl' cannot be found."
  */
-function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
+function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
+  let dinoId = ''
+  for (let i = 0; i < dinosaurs.length; i++) {
+    if (dinosaurs[i].name === dinosaurName) {
+      dinoId = dinosaurs[i].dinosaurId
+    } 
+  }
+  if (!dinoId) {
+    return `Dinosaur with name '${dinosaurName}' cannot be found.`
+  }
+  for (let j = 0; j < rooms.length; j++) {
+    if (rooms[j].dinosaurs.includes(dinoId)) {
+      return rooms[j].name
+  }
+  } return `Dinosaur with name '${dinosaurName}' cannot be found in any rooms.`
+    }
+  
+
 
 /**
  * getConnectedRoomNamesById()
@@ -49,7 +66,53 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
       "Kit Hopkins Education Wing"
     ]
  */
-function getConnectedRoomNamesById(rooms, id) {}
+function getConnectedRoomNamesById(rooms, id) {
+
+  let foundId = false;
+  let array = [];
+  let correctedRooms = [];
+  let roomNames = [];
+  let incorrectId = [];
+  
+  
+  for (let i = 0; i < rooms.length; i++){
+    if(rooms[i].roomId === id){
+      foundId = true;
+      for (let a = 0; a < rooms[i].connectsTo.length; a++){
+        array.push(rooms[i].connectsTo[a])
+      }
+    }
+  }
+  if (!foundId){
+    return `Room with ID of '${id}' could not be found.`
+  }
+  
+  for (let b = 0; b < array.length; b++ ){
+    for(let c = 0; c < rooms.length; c++){
+      if (array[b] === rooms[c].roomId){
+        roomNames.push(rooms[c].name)
+        correctedRooms.push(array[b])
+      }
+    }
+  }
+  
+  for (let d = 0; d < array.length; d++) {
+    let found = false;
+    for (let e = 0; e < correctedRooms.length; e++) {
+      if (array[d] === correctedRooms[e]) {
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      incorrectId.push(array[d]);
+    }
+  }
+  if (incorrectId.length) {
+    return `Room with ID of '${incorrectId[0]}' could not be found.`
+  }
+  return roomNames;
+}
 
 module.exports = {
   getRoomByDinosaurName,
