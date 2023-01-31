@@ -54,7 +54,31 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  let ticketType = ticketInfo.ticketType;
+  let entrantType = ticketInfo.entrantType;
+  let extraTicket = 0;
+  if(ticketType in ticketData && entrantType in ticketData[ticketType].priceInCents){
+     for(let i = 0; i < ticketInfo.extras.length; i++) {
+      if(ticketInfo.extras[i] in ticketData.extras) {
+        extraTicket += ticketData.extras[ticketInfo.extras[i]].priceInCents[ticketInfo.entrantType]
+        } else {
+         return `Extra type '${ticketInfo.extras[i]}' cannot be found.`;
+        } 
+      }
+     return ticketData[ticketType].priceInCents[entrantType] + extraTicket
+    } else if(!(ticketType in ticketData)){
+    return `Ticket type '${ticketType}' cannot be found.`
+    } else if(!(entrantType in ticketData[ticketType].priceInCents)){
+      return `Entrant type '${entrantType}' cannot be found.`
+  
+    }
+  
+    
+    
+    }
+
+
 
 /**
  * purchaseTickets()
@@ -109,7 +133,37 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+    function purchaseTickets(tickets, ticketTypes) {
+      const ticketPrices = {
+        "Adult General Admission": 30,
+        "Senior General Admission": 25,
+        "Child General Admission": 20,
+        "Adult Membership Admission": 28,
+        "Senior Membership Admission": 23,
+        "Child Membership Admission": 18
+      };
+    
+      let total = 0;
+      let receipt = "Thank you for visiting the Dinosaur Museum!\n";
+    
+      ticketTypes.forEach(ticketType => {
+        if (!ticketPrices[ticketType]) {
+          return "Ticket type '" + ticketType + "' cannot be found.";
+        }
+    
+        const ticketPrice = ticketPrices[ticketType];
+        total += ticketPrice;
+        receipt += `${ticketType}: $${ticketPrice.toFixed(2)}\n`;
+      });
+    
+      receipt += "-------------------------------------------\n";
+      receipt += "TOTAL: $" + total.toFixed(2);
+    
+      return receipt;
+    }
+    
+    
+    
 
 // Do not change anything below this line.
 module.exports = {
