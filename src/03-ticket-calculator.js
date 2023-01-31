@@ -54,7 +54,77 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+
+/* --------------------- RETURN TICKET PRICE -----------------------
+- 1. created var for accumulator of total
+- 2. if statement
+      - if ticketData param does not have the same prop as ticketInfo param return ticket type cant be found error msg
+      - else if ticketdata param doesnt have ticket info ticket type price in cents as an entrant type fpr ticketinfo return error for entrant
+- 3. start for in loop
+      - for tickets in ticket data
+      - if ticket from at position of loop in ticket data equals ticket info ticket type then total equals price in cent for that entrant type
+- 4. if extras array in ticket info equals 0 then return total
+- 5. started a for loop for extras array
+    - created var for extras which equal ticket info .extras at index
+    - if statement
+      - if extras from ticket data does not have extras at index then return extra eroor msg
+    - created a nested for in loop to loop thru extra price in extra array
+    - if extra price equals extra then total plus extras price in cent for entrant
+- 6. return total
+
+*/ 
+function calculateTicketPrice(ticketData, ticketInfo) {
+
+  let total;
+
+  if (!ticketData.hasOwnProperty(ticketInfo.ticketType)) {
+
+    return `Ticket type '${ticketInfo.ticketType}' cannot be found.`
+
+  } else if (!(ticketData[ticketInfo.ticketType].priceInCents).hasOwnProperty(ticketInfo.entrantType)) {
+
+    return `Entrant type '${ticketInfo.entrantType}' cannot be found.`
+  }
+
+  for (let ticket in ticketData) {
+    
+    if (ticket === ticketInfo.ticketType) {
+      
+      total = ticketData[ticket].priceInCents[ticketInfo.entrantType];
+
+    }
+  }
+
+  if (ticketInfo.extras.length === 0) {
+
+    return total;
+
+  }
+
+  for (let i = 0; i < ticketInfo.extras.length; i++) {
+
+    let extra = ticketInfo.extras[i];
+
+    if (!ticketData.extras.hasOwnProperty(extra)) {
+
+      return `Extra type '${extra}' cannot be found.`;
+
+    }
+
+    for (let extraPrice in ticketData.extras) {
+
+      if (extraPrice === extra) {
+        
+        total += ticketData.extras[extraPrice].priceInCents[ticketInfo.entrantType];
+
+      }
+    }
+
+  }
+  
+  return total;
+
+}
 
 /**
  * purchaseTickets()
@@ -109,7 +179,89 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+
+/* ---------- TICKET RECEIPT -----------
+- 1. created a var for ticket pruchase to reassign later
+- 2. created reciept for top of receipt with back ticks to skip lines
+- 3. started an acc. for total
+- 4. created var for cost of ticket to assign my previous function to
+- 5. created a for loop to start at index i; as long as i is less than purchases param which is an array
+    - assigned ticket purch var to purchases at index i
+    - assigned my previous function to cost of ticket param
+    - created an if statement
+      - if cost of ticket is not number return function output
+    - divided my cost of ticket  by 100 to convert into dollars
+    - reassigned my total tototal plus cost of ticket
+    - if statement
+      -if ticket purchase extras array is empty then receipt plus equals temp lit
+        - ticket purchase entrant type at index 0 to uppercase plus the rest of the letter using substring starting at index 1 plus desc and total with 2 dec. using tofixed method
+        - else return the smae methid as the last
+        - created a for loop within that statement for extras and added to receipt var the same way as previous
+        - else return using the same method
+- 6. created a var for a divider in the receipt and added divider to receipt var and total string with tofixed method then returned receipt
+
+*/
+function purchaseTickets(ticketData, purchases) {
+
+  let ticketPurchase;
+
+  let receipt = `Thank you for visiting the Dinosaur Museum!
+-------------------------------------------
+`
+;
+
+  let total = 0;
+  let costOfTicket;
+
+  for (let i = 0; i < purchases.length; i++) {
+
+    ticketPurchase = purchases[i];
+
+    costOfTicket = calculateTicketPrice(ticketData, ticketPurchase);
+
+    if (typeof costOfTicket !== "number") {
+
+      return costOfTicket;
+
+    }
+
+    costOfTicket /= 100;
+
+    total += costOfTicket;
+
+    if (ticketPurchase.extras.length === 0) {
+
+      receipt += `${ticketPurchase.entrantType[0].toUpperCase() + ticketPurchase.entrantType.substring(1)} ${ticketData[ticketPurchase.ticketType].description}: $${costOfTicket.toFixed(2)}
+`;
+
+    } else {
+
+      receipt += `${ticketPurchase.entrantType[0].toUpperCase() + ticketPurchase.entrantType.substring(1)} ${ticketData[ticketPurchase.ticketType].description}: $${costOfTicket.toFixed(2)} (`;
+
+      for (let j = 0; j < purchases[i].extras.length; j++) {
+
+        if (j !== purchases[i].extras.length - 1) {
+          receipt += `${purchases[i].extras[j][0].toUpperCase()}${purchases[i].extras[j].substring(1)} Access, `;
+
+        } else {
+
+          receipt += `${purchases[i].extras[j][0].toUpperCase()}${purchases[i].extras[j].substring(1)} Access)
+`;
+
+        }
+      }
+    }
+  }
+
+  let divider =  `-------------------------------------------
+`;
+
+  receipt += divider;
+  receipt += `TOTAL: $${total.toFixed(2)}`;
+
+  return receipt;
+
+}
 
 // Do not change anything below this line.
 module.exports = {
