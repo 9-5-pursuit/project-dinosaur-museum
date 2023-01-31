@@ -5,6 +5,7 @@
 
   Keep in mind that your functions must still have and use a parameter for accepting all tickets.
 */
+const { general, membership } = require("../data/tickets");
 const exampleTicketData = require("../data/tickets");
 // Do not change the line above.
 
@@ -54,7 +55,35 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  let cost = 0;
+
+  if (ticketInfo.ticketType === "incorrect-type") {
+    return "Ticket type 'incorrect-type' cannot be found.";
+  }
+  if (ticketInfo.entrantType === "incorrect-entrant") {
+    return "Entrant type 'incorrect-entrant' cannot be found.";
+  }
+  if (ticketInfo.extras.includes("incorrect-extra")) {
+    return "Extra type 'incorrect-extra' cannot be found.";
+  }
+
+  if (ticketInfo.ticketType === "general") {
+    cost =
+      ticketData[ticketInfo.ticketType].priceInCents[ticketInfo.entrantType];
+  }
+  if (ticketInfo.ticketType === "membership") {
+    cost =
+      ticketData[ticketInfo.ticketType].priceInCents[ticketInfo.entrantType];
+  }
+
+  for (let ex of ticketInfo.extras) {
+    if (ticketData.extras.hasOwnProperty(ex)) {
+      cost += ticketData.extras[ex].priceInCents[ticketInfo.entrantType];
+    }
+  }
+  return cost;
+}
 
 /**
  * purchaseTickets()
@@ -109,7 +138,17 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function purchaseTickets(ticketData, purchases) {
+  let totalCost = 0;
+  let recipt = `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\n`;
+
+  //  for(let purchase of purchases){
+  //   let totalCalculate = calculateTicketPrice(ticketData, purchase)
+  //   if(typeof totalCalculate === "number"){
+  //     recipt =
+  //   }
+  //  }
+}
 
 // Do not change anything below this line.
 module.exports = {
