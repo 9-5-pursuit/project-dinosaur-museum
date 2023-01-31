@@ -1,6 +1,6 @@
 const rooms = [
   {
-    roomId: "zwfsfPU5u", // 1
+    roomId: "zwfsfPU5u", // 1 
     name: "Entrance Room",
     requiredTicketPermissions: [],
     dinosaurs: [],

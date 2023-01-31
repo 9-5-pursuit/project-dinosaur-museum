@@ -54,7 +54,53 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+
+  let price = 0;
+
+  let type = ticketInfo.ticketType;
+
+  let entrantType = ticketInfo.entrantType;
+
+  let extras = ticketInfo.extras;
+
+  if (type !== "general" && type !== "membership") {
+
+    return `Ticket type '${type}' cannot be found.`;
+
+  }
+
+  if (entrantType !== "child" && entrantType !== "adult" && entrantType !== "senior") {
+
+    return `Entrant type '${entrantType}' cannot be found.`;
+
+  }
+
+  price += ticketData[`${type}`].priceInCents[`${entrantType}`];
+
+  for (let i = 0; i < extras.length; i++) {
+
+    if (
+
+      extras[i] !== "movie" &&
+
+      extras[i] !== "education" &&
+
+      extras[i] !== "terrace"
+
+    ) {
+
+      return `Extra type '${extras[i]}' cannot be found.`;
+
+    }
+
+    price += ticketData.extras[`${extras[i]}`].priceInCents[`${entrantType}`];
+
+  }
+
+  return price;
+  
+}
 
 /**
  * purchaseTickets()
@@ -109,7 +155,77 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function purchaseTickets(ticketData, purchases) {
+
+  let total = 0;
+
+  const receiptIntro = `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\n`;
+
+  let tickets = "";
+
+  let receipt = "";
+
+  for (let i = 0; i < purchases.length; i++) {
+
+    let price = calculateTicketPrice(ticketData, purchases[i]);
+
+      if (typeof price !== "number") {
+
+        return price;
+
+      }
+
+    total += price;
+
+    let purchaseType = purchases[i].ticketType;
+
+    let purchaseEntrant = purchases[i].entrantType;
+
+    let purchaseExtras = purchases[i].extras;
+
+    let firstWord = `${purchaseEntrant}`;
+
+    let cap1 = firstWord.charAt(0).toUpperCase() + firstWord.slice(1);
+
+    let secondWord = `${purchaseType}`;
+
+    let cap2 = secondWord.charAt(0).toUpperCase() + secondWord.slice(1);
+
+    tickets += `${cap1} ${cap2} Admission: $${(price / 100).toFixed(2)}`;
+
+      if (purchaseExtras.length > 0) {
+
+        let accessedInfo = "";
+
+          for (let j = 0; j < purchaseExtras.length; j++) {
+
+            accessedInfo += ticketData.extras[`${purchaseExtras[j]}`].description;
+
+            if (j !== purchaseExtras.length - 1) {
+
+              accessedInfo += ", ";
+
+          }
+
+        }
+
+        tickets += ` (${accessedInfo})`;
+
+      }
+
+      tickets += "\n";
+    
+  }
+
+  let bottomOfReceipt = `-------------------------------------------\nTOTAL: $${(
+    total / 100
+  ).toFixed(2)}`;
+
+  receipt = receiptIntro + tickets + bottomOfReceipt;
+  
+  return receipt;
+
+}
 
 // Do not change anything below this line.
 module.exports = {
