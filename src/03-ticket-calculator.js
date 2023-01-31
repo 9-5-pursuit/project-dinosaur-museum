@@ -54,7 +54,143 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+//TICKETDATA
+    // {
+    //   general: {
+    //     description: 'General Admission',
+    //     priceInCents: { child: 2000, adult: 3000, senior: 2500 }
+    //   },
+    //   membership: {
+    //     description: 'Membership Admission',
+    //     priceInCents: { child: 1500, adult: 2800, senior: 2300 }
+    //   },
+    //   extras: {
+    //     movie: { description: 'Movie Access', priceInCents: [Object] },
+    //     education: { description: 'Education Access', priceInCents: [Object] },
+    //     terrace: { description: 'Terrace Access', priceInCents: [Object] }
+    //   }
+    // }
+function calculateTicketPrice(ticketData, ticketInfo) {
+
+  let cost = 0
+
+
+
+  if ( ticketInfo.ticketType !== `general` && ticketInfo.ticketType !== `membership`) return `Ticket type '${ticketInfo.ticketType}' cannot be found.`
+
+  if ( ticketInfo.entrantType !== `child` && ticketInfo.entrantType !== `adult` && ticketInfo.entrantType !== `senior`) return `Entrant type '${ticketInfo.entrantType}' cannot be found.`
+
+  for(let i = 0; i < ticketInfo.extras.length; i++){
+    if(ticketInfo.extras[i] !== 'movie' && ticketInfo.extras[i] !== 'education' && ticketInfo.extras[i] !== 'terrace')return `Extra type '${ticketInfo.extras[i]}' cannot be found.`
+
+  }
+  
+    // let key = Object.keys(ticketData.extras)
+    // if(!key.includes(ticketInfo.extras)) return `Extra type '${ticketInfo.extras}' cannot be found.`
+
+  // for (let i = 0; i < ticketInfo.extras.length; i++){
+  //   if (ticketInfo.extras[i].length === 0)return `Extra type '${ticketInfo.extras}' cannot be found.`
+  // }
+
+
+
+
+  if ( ticketInfo.ticketType === `general`){
+
+    if ( ticketInfo.entrantType === `child`){
+      cost = ticketData.general.priceInCents.child
+
+      if(ticketInfo.extras.includes("movie")){
+        cost += ticketData.extras.movie.priceInCents.child
+      }
+      if(ticketInfo.extras.includes("education")){
+        cost += ticketData.extras.education.priceInCents.child
+      }
+      if(ticketInfo.extras.includes("terrace")){
+        cost += ticketData.extras.terrace.priceInCents.child
+      }
+
+      
+    }
+    if ( ticketInfo.entrantType === `adult`){
+      cost = ticketData.general.priceInCents.adult
+
+      if(ticketInfo.extras.includes("movie")){
+        cost += ticketData.extras.movie.priceInCents.adult
+      }
+      if(ticketInfo.extras.includes("education")){
+        cost += ticketData.extras.education.priceInCents.adult
+      }
+      if(ticketInfo.extras.includes("terrace")){
+        cost += ticketData.extras.terrace.priceInCents.adult
+      }
+      
+    }
+    if ( ticketInfo.entrantType === `senior`){
+      cost = ticketData.general.priceInCents.senior
+
+      if(ticketInfo.extras.includes("movie")){
+        cost += ticketData.extras.movie.priceInCents.senior
+      }
+      if(ticketInfo.extras.includes("education")){
+        cost += ticketData.extras.education.priceInCents.senior
+      }
+      if(ticketInfo.extras.includes("terrace")){
+        cost += ticketData.extras.terrace.priceInCents.senior
+      }
+      
+    }}
+  
+
+  if ( ticketInfo.ticketType === `membership`){
+
+    if ( ticketInfo.entrantType === `child`){
+      cost = ticketData.membership.priceInCents.child
+
+      if(ticketInfo.extras.includes("movie")){
+        cost += ticketData.extras.movie.priceInCents.child
+      }
+      if(ticketInfo.extras.includes("education")){
+        cost += ticketData.extras.education.priceInCents.child
+      }
+      if(ticketInfo.extras.includes("terrace")){
+        cost += ticketData.extras.terrace.priceInCents.child
+      }
+
+      
+    }
+    if ( ticketInfo.entrantType === `adult`){
+      cost = ticketData.membership.priceInCents.adult
+
+      if(ticketInfo.extras.includes("movie")){
+        cost += ticketData.extras.movie.priceInCents.adult
+      }
+      if(ticketInfo.extras.includes("education")){
+        cost += ticketData.extras.education.priceInCents.adult
+      }
+      if(ticketInfo.extras.includes("terrace")){
+        cost += ticketData.extras.terrace.priceInCents.adult
+      }
+      
+    }
+    if ( ticketInfo.entrantType === `senior`){
+      cost = ticketData.membership.priceInCents.senior
+      
+      if(ticketInfo.extras.includes("movie")){
+        cost += ticketData.extras.movie.priceInCents.senior
+      }
+      if(ticketInfo.extras.includes("education")){
+        cost += ticketData.extras.education.priceInCents.senior
+      }
+      if(ticketInfo.extras.includes("terrace")){
+        cost += ticketData.extras.terrace.priceInCents.senior
+      }
+      
+    }}
+
+    return cost
+  }
+
 
 /**
  * purchaseTickets()
@@ -109,7 +245,68 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function purchaseTickets(ticketData, purchases) {
+  for(let i = 0; i < purchases.length; i++){
+  if ( purchases[i].ticketType !== `general` && purchases[i].ticketType !== `membership`) return "Ticket type 'incorrect-type' cannot be found."
+
+  if ( purchases[i].entrantType !== `child` && purchases[i].entrantType !== `adult` && purchases[i].entrantType !== `senior`) return `Entrant type 'incorrect-entrant' cannot be found.`
+
+
+  for(let j = 0; j < purchases[i].extras.length; j++){
+    if(purchases[i].extras[j] !== 'movie' && purchases[i].extras[j] !== 'education' && purchases[i].extras[j] !== 'terrace')return `Extra type 'incorrect-extra' cannot be found.`
+
+  }}
+
+
+  
+  let opening = [`Thank you for visiting the Dinosaur Museum!\n-------------------------------------------`];
+  let closing = [`\n-------------------------------------------\nTOTAL: $`];
+  let costOfTicket = 0;
+  let list = '';
+  let total = 0;
+
+  for(let i = 0; i < purchases.length; i++){
+
+
+      
+
+   //calling previous function for prices
+   costOfTicket = calculateTicketPrice(ticketData, purchases[i]);
+   costOfTicket = costOfTicket / 100;
+   total = total + costOfTicket;
+
+
+   list = `\n${(purchases[i].entrantType[0].toUpperCase() + purchases[i].entrantType.slice(1)) + " " + (purchases[i].ticketType[0].toUpperCase() + purchases[i].ticketType.slice(1)) + ' Admission: ' + '$' + (costOfTicket) + '.00'}`
+   //Admissions added to thank you heading
+   opening.push(list) 
+   let extras = [];
+   for(let j = 0; j < purchases[i].extras.length; j++){
+     if(purchases[i].extras[j] === "movie"){
+    extras.push("Movie Access")
+
+    } else if(purchases[i].extras[j] === "education"){
+     extras.push("Education Access")
+
+    } else if(purchases[i].extras[j] === "terrace"){
+     extras.push("Terrace Access")
+     }  
+
+   }    
+//Adds extras to list
+   if(extras.length !== 0){
+
+   opening.push(` (${extras.join(', ')})`);
+   }   
+  }
+   //Add it all together
+    opening.push(closing);
+    opening.push(total );
+    // could not get /100).toFixed(2) to work
+    opening.push(`.00`);
+    return opening.join('');
+      
+
+}
 
 // Do not change anything below this line.
 module.exports = {
