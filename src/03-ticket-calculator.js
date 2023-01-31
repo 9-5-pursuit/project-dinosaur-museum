@@ -54,7 +54,31 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  let admissionType = ticketInfo.ticketType;
+  let ageGroup = ticketInfo.entrantType;
+  let extrasAccessType = ticketInfo.extras;
+  let admissionPrice = 0;
+  let extrasPrice = 0;
+
+  if (admissionType !== "membership" && admissionType !== "general") {
+    return `Ticket type '${admissionType}' cannot be found.`; // => ticket type does not match an existing ticket type.
+  }  
+  if (ageGroup !== "child" && ageGroup !== "adult" && ageGroup !== "senior") {
+    return `Entrant type '${ageGroup}' cannot be found.`; // => entrant type does not match an existing entrant type.
+  }
+  // I couldn't get the extras error test resolved without using an index variable. So, I'll move that one below in my loop. First I've calculated the admissionPrice. I'll add it to the extrasPrice that will be calculated in my loop with the index variable as well.
+  admissionPrice += ticketData[admissionType].priceInCents[ageGroup];
+
+  for (let i = 0; i < extrasAccessType.length; i++) {
+    if (extrasAccessType[i] !== "movie" && extrasAccessType[i] !== "education" && extrasAccessType[i] !== "terrace") {
+      return `Extra type '${extrasAccessType[i]}' cannot be found.`;
+    }
+    extrasPrice += ticketData.extras[extrasAccessType[i]].priceInCents[ageGroup];
+  }
+  // returns the admissionPrice and extrasPrice combined.
+  return (admissionPrice + extrasPrice);
+}
 
 /**
  * purchaseTickets()
@@ -109,7 +133,34 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function purchaseTickets(ticketData, purchases) {
+  let receiptTotal = 0;
+  let receiptFinalPrice = 0;
+  let receiptStart = `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------`;
+
+  for (let i = 0; i < purchases.length; i++) {
+    let ticketPurchasesIndex = purchases[i];
+    let ticketPrice = calculateTicketPrice(ticketData, ticketPurchasesIndex);
+    if (typeof ticketPrice !== "number") {
+      return ticketPrice;
+    } 
+    ticketPrice /= 100;
+    receiptTotal += ticketPrice;
+    if (ticketPurchasesIndex.extras.length) {
+      
+    }
+// I'm stuck on this one. I was getting help from home, but since I don't fully understand some of what I've entered on this one, I"m going to give up on this one and spend my remaining time cleaning up my code for the rest of the assignment which I was able to do completely on my own. It's a shame that this last part had 20% of all the tests for the entire project and 12 of those 13 tests required the completion of the printed receipt to pass any of them.
+  
+      
+    }   
+    
+  
+
+
+
+
+  return receiptEnd + `\n-------------------------------------------\nTOTAL: $${(receiptFinalPrice / 100).toFixed(2)}`;
+}
 
 // Do not change anything below this line.
 module.exports = {
