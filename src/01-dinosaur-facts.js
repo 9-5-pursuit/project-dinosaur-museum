@@ -53,7 +53,7 @@ function getLongestDinosaur(dinosaurs) {
 function getDinosaurDescription(dinosaurs, id) {
   //get object that includes the id
   var res = dinosaurs.find(item => item.dinosaurId==id)
-  return res ? `${res.name} (${res.pronunciation})\n${res.info} It lived in the ${res.period} period, over ${res.mya[res.mya.length-1]} million years ago.` : "A dinosaur with an ID of 'incorrect-id' cannot be found."
+  return res ? `${res.name} (${res.pronunciation})\n${res.info} It lived in the ${res.period} period, over ${res.mya[res.mya.length-1]} million years ago.` : `A dinosaur with an ID of '${id}' cannot be found.`
 }
 
 /**
