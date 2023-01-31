@@ -102,7 +102,7 @@ const dinosaurs = [
     dinosaurId: "Pr6kc4Q_Xf",
     name: "Khaan",
     pronunciation: "kahn",
-    meaningOfName: "ruler",
+    meaningOfNam: "ruler",
     diet: "omnivorous",
     lengthInMeters: 1.8,
     period: "Late Cretaceous",
