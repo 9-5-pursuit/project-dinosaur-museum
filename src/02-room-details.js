@@ -25,7 +25,30 @@ const exampleRoomData = require("../data/rooms");
  *  getRoomByDinosaurName(dinosaurs, rooms, "Pterodactyl");
  *  //> "Dinosaur with name 'Pterodactyl' cannot be found."
  */
-function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
+/**
+ * I created 2 varaible in this function. One to store the dinosaurId so I could use the value from it in an outside loop. The second variable was used to store the room that the dinosaur can be found in so I could return back the result. Otherwise an error message is given if there's no id found because the given name and the names in the museum don't match. The other error essage is if the room doesn't match the dinosaur even if the dinosaur has been found in the system.
+ */
+function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
+  let id;
+  let dinoRoom;
+  for(let i = 0; i < dinosaurs.length; i++) {
+    if (dinosaurName === dinosaurs[i].name) {
+      id = dinosaurs[i].dinosaurId;
+    }
+  }
+  for (let j = 0; j < rooms.length; j++) {
+    if (rooms[j].dinosaurs.includes(id)) {
+      dinoRoom = rooms[j].name;
+    }
+  }
+  if (!id) {
+  return `Dinosaur with name '${dinosaurName}' cannot be found.`
+  } else if (!dinoRoom) {
+    return `Dinosaur with name '${dinosaurName}' cannot be found in any rooms.`
+  } else {
+    return dinoRoom;
+  }
+}
 
 /**
  * getConnectedRoomNamesById()
@@ -49,7 +72,34 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
       "Kit Hopkins Education Wing"
     ]
  */
-function getConnectedRoomNamesById(rooms, id) {}
+/**
+ * I created 2 empty arrays. One is meant to store the values of the rooms that connect to the given room and if they don't then the id cannot be found. Once the values are store I used the new array they are stored in inside a for loop where I set a variable to be false unless the rooms in the new array match the rooms roomIds. If they are all found then the values are pushed onto an array as the rooms names instead and if they are not all found then and error message is given since found came out to be false.
+ */
+function getConnectedRoomNamesById(rooms, id) {
+  let connectedArray = [];
+  let connectedNames = [];
+    for (let i = 0; i < rooms.length; i++) {
+      if (rooms[i].roomId === id) {
+        connectedArray = rooms[i].connectsTo;
+      }
+    }
+    if (connectedArray.length === 0) {
+      return `Room with ID of '${id}' could not be found.`;
+    }
+    for (let i = 0; i < connectedArray.length; i++) {
+      let found = false;
+      for (let j = 0; j < rooms.length; j++) {
+        if (rooms[j].roomId === connectedArray[i]) {
+          found = true;
+          connectedNames.push(rooms[j].name);
+        }
+      }
+      if (found === false) {
+        return `Room with ID of '${connectedArray[i]}' could not be found.`;
+      }
+    }
+    return connectedNames;
+}
 
 module.exports = {
   getRoomByDinosaurName,
