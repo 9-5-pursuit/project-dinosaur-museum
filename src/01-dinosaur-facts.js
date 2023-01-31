@@ -22,8 +22,22 @@ const exampleDinosaurData = require("../data/dinosaurs");
  *  getLongestDinosaur(dinosaurs);
  *  //> { Brachiosaurus: 98.43 }
  */
-function getLongestDinosaur(dinosaurs) {}
-
+function getLongestDinosaur(dinosaurs) {
+  if (!dinosaurs.length) { // => if there are no dinosaurs in the array, the length will be zero, and so this will return an empty object.
+    return {};
+  }
+  let length = 0; // stores the length in meters of the longest dinosaur. set to zero to bgein storing lengths in the loop.
+  let dino; // stores the name of the longest dinosaur.
+  for (const dinosaur of dinosaurs) { // => for of loop for every dinosaur within the dinosaurs array.
+    if (length < dinosaur.lengthInMeters) {
+      length = dinosaur.lengthInMeters;
+      dino = dinosaur.name;
+    }
+  }
+  let longest = {}; // final object of the longest dinosaur
+  longest[dino] = length * 3.281; // stores key of the longest dinosaur's name with a value of the length converted to feet.
+  return longest;
+}
 /**
  * getDinosaurDescription()
  * ---------------------
@@ -44,7 +58,13 @@ function getLongestDinosaur(dinosaurs) {}
  *  getDinosaurDescription(dinosaurs, "incorrect-id");
  *  //> "A dinosaur with an ID of 'incorrect-id' cannot be found."
  */
-function getDinosaurDescription(dinosaurs, id) {}
+function getDinosaurDescription(dinosaurs, id) {
+  let dinosaur = dinosaurs.find(dino => dino.dinosaurId === id); // => uses the find() method to search the dinosaurs array for an object, represented by dino, of which the value of the dinosaurId key is equal to the id parameter given. this object is then stored in the variable dinosaur.
+  if (!dinosaur) { // => if dinosaur is undefined, this will return an error message.
+    return `A dinosaur with an ID of '${id}' cannot be found.`;
+  }
+  return `${dinosaur.name} (${dinosaur.pronunciation})\n${dinosaur.info} It lived in the ${dinosaur.period} period, over ${dinosaur.mya[dinosaur.mya.length-1]} million years ago.`;
+}
 
 /**
  * getDinosaursAliveMya()
@@ -71,7 +91,42 @@ function getDinosaurDescription(dinosaurs, id) {}
  *  getDinosaursAliveMya(dinosaurs, 65, "unknown-key");
  *  //> ["WHQcpcOj0G"]
  */
-function getDinosaursAliveMya(dinosaurs, mya, key) {}
+function getDinosaursAliveMya(dinosaurs, mya, key) {
+  let dinosAlive = []; // => an array that stores either the ids or the values of the key parameter of the dinosaurs alive during the mya given.
+
+  //*Alternative Code* => alternate code for the function: less bloated conditional, more statements used.
+  //let lifespan;
+  // for (const dinosaur of dinosaurs) {
+  //   if (dinosaur.mya.length === 1) {
+  //     lifespan = dinosaur.mya[0];
+  //     if (lifespan === mya || lifespan === mya+1) {
+  //       if (dinosaur[key] !== undefined) {
+  //         console.log(dinosaur);
+  //         // console.log(`key = ${key}`);
+  //         // console.log(dinosaur[key]);
+  //         dinosAlive.push(dinosaur[key]);
+  //       } else dinosAlive.push(dinosaur.dinosaurId);
+  //     }
+  //   } else {
+  //     lifespan = dinosaur.mya
+  //     if (lifespan[0] >= mya && lifespan[1] <= mya) {
+  //       if (dinosaur[key] !== undefined) {
+  //         dinosAlive.push(dinosaur[key]);
+  //       } else dinosAlive.push(dinosaur.dinosaurId);
+  //     }
+  //   }
+  // }
+  for (const dinosaur of dinosaurs) {
+    if ((dinosaur.mya.length === 1 && (dinosaur.mya[0] === mya || dinosaur.mya[0] === mya+1)) ||
+        (dinosaur.mya[0] >= mya && dinosaur.mya[1] <= mya)) { // => a very long conditional statement that checks if either the dinosaur's mya is a single number, and if so whether it equals to the mya parameter given or 1 less, OR if if the dinosaur's mya
+        if (dinosaur[key] !== undefined) { // => if a key was given, will create array of the values of that key for each dino, else will create an array of ids.
+          dinosAlive.push(dinosaur[key]);
+        } else dinosAlive.push(dinosaur.dinosaurId);
+    }
+  }
+  
+  return dinosAlive;
+}
 
 module.exports = {
   getLongestDinosaur,
