@@ -25,7 +25,30 @@ const exampleRoomData = require("../data/rooms");
  *  getRoomByDinosaurName(dinosaurs, rooms, "Pterodactyl");
  *  //> "Dinosaur with name 'Pterodactyl' cannot be found."
  */
-function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
+function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
+  let errorMessage = `Dinosaur with name '${dinosaurName}' cannot be found in any rooms.`
+    let dinoMap = dinosaurs.reduce((acc, dino) => {
+      acc[dino.name] = dino.dinosaurId;
+      return acc;
+    }, {});
+
+    if (!dinoMap[dinosaurName]) {
+      return `Dinosaur with name '${dinosaurName}' cannot be found.`;
+    }
+    const roomFound = rooms.find((room) =>
+      room.dinosaurs.includes(dinoMap[dinosaurName])
+    );
+  
+    if (roomFound) {
+      return roomFound.name;
+    }
+  
+    return errorMessage;
+  };
+  
+    
+
+
 
 /**
  * getConnectedRoomNamesById()
@@ -49,7 +72,29 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
       "Kit Hopkins Education Wing"
     ]
  */
-function getConnectedRoomNamesById(rooms, id) {}
+function getConnectedRoomNamesById(rooms, id) {
+    // Declaration
+      let dinoId = ""
+      for(let i = 0; i < rooms.length; i++){
+        if(rooms[i].name === dinosaurName){ // checking if parameter dinosaur name same as dinosaurs.dinosaurname
+            dinoId = dinosaurs[i].dinosaurId
+        }
+      } // end of for loop
+    
+      // Error Message
+      if (!dinoId){       // if dinoId falsy then given dinosaur name cant be found
+        return `Dinosaur with name '${dinosaurName}' cannot be found.`
+      }
+      for(let j = 0; j < rooms.length; j++){
+        if(rooms[j].dinosaurs.includes(dinoId)){ // checking if rooms.dinosaur[] has dinosaur ID same as dinosaurs.dinosaurId
+          return `${rooms[j].name}`
+        }
+      } // end of for loop
+      return `Dinosaur with name '${dinosaurName}' cannot be found in any rooms.`
+    
+    } // end of function
+
+  
 
 module.exports = {
   getRoomByDinosaurName,
