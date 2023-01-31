@@ -66,7 +66,6 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
     ]
  */
 function getConnectedRoomNamesById(rooms, id) {
-  // let dino = dinosaurs.find(dino => dino.name === dinosaurName)//dino is dinosuarName found in the dinosaurs array
 
   let room = rooms.find(room => room.roomId === id)
   if(room ){
