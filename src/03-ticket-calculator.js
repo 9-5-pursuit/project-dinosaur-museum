@@ -5,6 +5,7 @@
 
   Keep in mind that your functions must still have and use a parameter for accepting all tickets.
 */
+const tickets = require("../data/tickets");
 const exampleTicketData = require("../data/tickets");
 // Do not change the line above.
 
@@ -54,7 +55,59 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  //console.log(ticketData)
+  //console.log(ticketInfo)
+
+  //console.log(tickets)
+
+  //console.log(ticketInfo.extras)
+  //console.log(ticketInfo.entrantType)
+
+  let answer = null
+
+  if (ticketInfo.ticketType === 'general' && ticketInfo.entrantType === 'child') {
+    answer = tickets.general.priceInCents.child
+  } else if (ticketInfo.ticketType === 'general' && ticketInfo.entrantType === 'adult') {
+    answer = tickets.general.priceInCents.adult
+  } else if (ticketInfo.ticketType === 'general' && ticketInfo.entrantType === 'senior') {
+    answer = tickets.general.priceInCents.senior
+  } else if (ticketInfo.ticketType === 'membership' && ticketInfo.entrantType === 'child') {
+    answer = tickets.membership.priceInCents.child
+  } else if (ticketInfo.ticketType === 'membership' && ticketInfo.entrantType === 'adult') {
+    answer = tickets.membership.priceInCents.adult
+  } else if (ticketInfo.ticketType === 'membership' && ticketInfo.entrantType === 'senior') {
+    answer = tickets.membership.priceInCents.senior
+  }
+  if (ticketInfo.ticketType !== 'general' && ticketInfo.ticketType !== 'membership') {
+    return `Ticket type '${ticketInfo.ticketType}' cannot be found.`
+  } else if (ticketInfo.entrantType !== 'adult' && ticketInfo.entrantType !== 'child' && ticketInfo.entrantType !== 'senior') {
+    return `Entrant type '${ticketInfo.entrantType}' cannot be found.`
+  }
+  //else if () {
+  //   return `Ticket type '${ticketInfo.ticketType}' cannot be found.`
+  // }
+
+
+
+  //console.log(answer)
+
+  //let extraCost = 0
+
+  for (let i in ticketInfo.extras) {
+    answer += (tickets.extras[ticketInfo.extras[i]].priceInCents[ticketInfo.entrantType])
+  }
+
+
+
+  //console.log(answer)
+  //console.log(tickets.extras.movie.priceInCents[ticketInfo.entrantType])
+
+
+
+  return answer
+
+}
 
 /**
  * purchaseTickets()
@@ -97,7 +150,7 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     ];
     purchaseTickets(tickets, purchases);
     //> "Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\nAdult General Admission: $50.00 (Movie Access, Terrace Access)\nSenior General Admission: $35.00 (Terrace Access)\nChild General Admission: $45.00 (Education Access, Movie Access, Terrace Access)\nChild General Admission: $45.00 (Education Access, Movie Access, Terrace Access)\n-------------------------------------------\nTOTAL: $175.00"
-
+ 
  * EXAMPLE:
     const purchases = [
       {
@@ -109,7 +162,37 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function purchaseTickets(ticketData, purchases) {
+
+
+  //console.log(purchases[5].extras)
+  //console.log(ticketData.extras.movie.priceInCents.child)
+  let cost = 0
+  for (let i in purchases) {
+    cost += (ticketData[purchases[i].ticketType].priceInCents[purchases[i].entrantType])
+  }
+  // for (let i in purchases) {
+  //   cost += ((ticketData[purchases.extras[i]].priceInCents[purchases.entrantType]))
+  // }
+  //console.log(cost)
+
+
+  let costToFixed = (cost / 100).toFixed(2)
+  //console.log(costToFixed)
+
+  //console.log(purchases)
+
+
+  // return `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\nAdult General Admission: $${costToFixed}\n-------------------------------------------\nTOTAL: $${costToFixed}`
+
+
+  //console.log(ticketData[purchases[ticketType]].priceInCents[purchases[entrantType]])
+  //console.log(purchases)
+
+
+
+
+}
 
 // Do not change anything below this line.
 module.exports = {
