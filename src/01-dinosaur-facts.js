@@ -51,6 +51,7 @@ let name = dinosaurs[0].name;
 
 
 
+
 /**
  * getDinosaurDescription()
  * ---------------------
