@@ -5,6 +5,7 @@
 
   Keep in mind that your functions must still have and use a parameter for accepting all tickets.
 */
+const { extras } = require("../data/tickets");
 const exampleTicketData = require("../data/tickets");
 // Do not change the line above.
 
@@ -54,8 +55,35 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  let price = 0;
+  let type = ticketInfo.ticketType;
+  let entrant = ticketInfo.entrantType;
+  let xtras = ticketInfo.extras;
 
+  if (type !== "general" && type !== "membership") {
+    return `Ticket type '${type}' cannot be found.`;
+  }
+  if (entrant !== "child" && entrant !== "adult" && entrant !== "senior") {
+    return `Entrant type '${entrant}' cannot be found.`;
+  }
+
+  price += ticketData[`${type}`].priceInCents[`${entrant}`];
+
+  for (let i = 0; i < xtras.length; i++) {
+    if (
+      xtras[i] !== "movie" &&
+      xtras[i] !== "education" &&
+      xtras[i] !== "terrace"
+    ) {
+      return `Extra type '${xtras[i]}' cannot be found.`;
+    }
+    price += ticketData.extras[`${xtras[i]}`].priceInCents[`${entrant}`];
+  }
+  return price;
+}
+
+// ticketInfo.extras[i] !== "movie" && ticketInfo.extras[i] !== "education" && ticketInfo.extras[i] !== "terrace"
 /**
  * purchaseTickets()
  * ---------------------
@@ -109,7 +137,62 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+
+function purchaseTickets(ticketData, purchases) {
+  let total = 0;
+  const receiptIntro = `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\n`;
+  let lineItem = "";
+  let receipt = "";
+  for (let i = 0; i < purchases.length; i++) {
+    let price = calculateTicketPrice(ticketData, purchases[i]);
+    if (typeof price !== "number") {
+      return price;
+    }
+
+    total += price;
+
+    let purType = purchases[i].ticketType;
+
+    let purEntrant = purchases[i].entrantType;
+
+    let purXtras = purchases[i].extras;
+
+    let firstWord = `${purEntrant}`;
+
+    let cap1 = firstWord.charAt(0).toUpperCase() + firstWord.slice(1);
+
+    let secWord = `${purType}`;
+
+    let cap2 = secWord.charAt(0).toUpperCase() + secWord.slice(1);
+
+    lineItem += `${cap1} ${cap2} Admission: $${(price / 100).toFixed(2)}`;
+
+    if (purXtras.length > 0) {
+      let access = "";
+
+      for (let j = 0; j < purXtras.length; j++) {
+        access += ticketData.extras[`${purXtras[j]}`].description;
+
+        if (j !== purXtras.length - 1) {
+          access += ", ";
+        }
+      }
+      lineItem += ` (${access})`;
+    }
+    lineItem += "\n";
+
+    
+  }
+  let bottomOfRec = `-------------------------------------------\nTOTAL: $${(
+    total / 100
+  ).toFixed(2)}`;
+
+
+  receipt = receiptIntro + lineItem + bottomOfRec;
+  
+  return receipt;
+}
+
 
 // Do not change anything below this line.
 module.exports = {

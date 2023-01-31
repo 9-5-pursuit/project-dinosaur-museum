@@ -1,4 +1,4 @@
-const tickets = {
+ const tickets = {
   general: {
     description: "General Admission",
     priceInCents: {
