@@ -54,7 +54,96 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  let ticketTyp = ticketInfo.ticketType;
+  let entrantTyp = ticketInfo.entrantType;
+  let extraTyp = ticketInfo.extras;
+  let genTicketPrice;
+  let membTicketPrice;
+  let genExtraMov;
+  let tickPriceWithExtra;
+  let TotalTicketPrice;
+  let TotalTicketPrice2;
+
+    if (ticketInfo["ticketType"] === "general") {
+        genTicketPrice = ticketData.general.priceInCents[entrantTyp]
+        return genTicketPrice;
+      }
+    if (ticketInfo["ticketType"] === "membership") {
+      //   if (!ticketInfo.extras) {
+          membTicketPrice = ticketData.membership.priceInCents[entrantTyp];
+          return membTicketPrice;
+    }
+    if (ticketInfo["ticketType"] !== ticketData) {
+      return `Ticket type '${ticketInfo.ticketType}' cannot be found.` 
+    }
+    
+    if (ticketInfo["entrantType"] === "incorrect-entrant") {
+      return `Entrant type '${ticketInfo.entrantType}' cannot be found.`
+    }
+      if (ticketInfo["extras"] !== ticketData.extras)
+    return `Extra type '${ticketInfo.extras}' cannot be found.`
+
+    if (ticketInfo["ticketType"] === "general") {
+
+      if (ticketInfo.extras[0] === "movie") {          
+          tickPriceWithExtra = ticketData.extras.movie.priceInCents[entrantTyp]
+          TotalTicketPrice = ticketData.general.priceInCents[entrantTyp] + tickPriceWithExtra;       
+          return TotalTicketPrice;
+
+      } else if 
+         (ticketInfo.extras[0] === "movie" && 
+         ticketInfo.extras[1] === "education") {
+
+        TotalTicketPrice = ticketData.general.priceInCents[entrantTyp] + ticketData.extras.movie.priceInCents[entrantTyp] + ticketData.extras.education.priceInCents[entrantTyp]
+        return TotalTicketPrice;
+
+      } else if
+        (ticketInfo.extras[0] === "terrace" && 
+         ticketInfo.extras[1] === "education") {
+         TotalTicketPrice = ticketData.general.priceInCents[entrantTyp] + ticketData.extras.terrace.priceInCents[entrantTyp] + ticketData.extras.education.priceInCents[entrantTyp]
+         return TotalTicketPrice;
+
+        }  else if
+            (ticketInfo.extras[0] === "terrace" && 
+            ticketInfo.extras[1] === "movie" && 
+            ticketInfo.extras[2] === "education") {
+            TotalTicketPrice = ticketData.general.priceInCents[entrantTyp] + ticketData.extras.terrace.priceInCents[entrantTyp] + ticketData.extras.education.priceInCents[entrantTyp] + ticketData.extras.movie.priceInCents[entrantTyp];
+            return TotalTicketPrice;
+            }
+      }
+    
+    if (ticketInfo["ticketType"] === "membership") {
+
+      if (ticketInfo.extras[0] === "movie") { 
+          tickPriceWithExtra = ticketData.extras.movie.priceInCents[entrantTyp];
+          TotalTicketPrice = ticketData.general.priceInCents[entrantTyp] + tickPriceWithExtra;       
+          return TotalTicketPrice;
+      
+      } else if 
+         (ticketInfo.extras[0] === "movie" && 
+         ticketInfo.extras[1] === "education") {
+
+        TotalTicketPrice = ticketData.membership.priceInCents[entrantTyp] + ticketData.extras.movie.priceInCents[entrantTyp] + ticketData.extras.education.priceInCents[entrantTyp]
+        return TotalTicketPrice;
+
+      } else if
+        (ticketInfo.extras[0] === "terrace" && 
+         ticketInfo.extras[1] === "education") {
+         TotalTicketPrice = ticketData.membership.priceInCents[entrantTyp] + ticketData.extras.terrace.priceInCents[entrantTyp] + ticketData.extras.education.priceInCents[entrantTyp]
+         return TotalTicketPrice;
+
+      } else if
+          (ticketInfo.extras[0] === "terrace" && 
+          ticketInfo.extras[1] === "movie" && 
+          ticketInfo.extras[2] === "education") {
+          TotalTicketPrice = ticketData.membership.priceInCents[entrantTyp] + ticketData.extras.terrace.priceInCents[entrantTyp] + ticketData.extras.education.priceInCents[entrantTyp] + ticketData.extras.movie.priceInCents[entrantTyp];
+          return TotalTicketPrice;
+          }
+      }
+  }
+
+
 
 /**
  * purchaseTickets()
@@ -109,7 +198,10 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function purchaseTickets(ticketData, purchases) {
+
+  
+}
 
 // Do not change anything below this line.
 module.exports = {
