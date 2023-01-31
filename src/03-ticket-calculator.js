@@ -54,8 +54,33 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  let generalExtra = 0;
+  let generalTicket = 0;
+  if (ticketInfo.ticketType === "general") {
+      generalTicket = ticketData.general.priceInCents[ticketInfo.entrantType];
+  
+  return generalTicket;
 
+  } if (ticketInfo.ticketType === "general" && ticketInfo.ticketType === "extras") {
+    generalExtra = ticketData.general.priceInCents[ticketInfo.entrantType] + ticketData.extras.priceInCents[ticketInfo.extras];
+
+    return generalExtra;
+  }
+let memberTicket = 0;
+  if (ticketInfo.ticketType === "membership") {
+    memberTicket = ticketData.membership.priceInCents[ticketInfo.entrantType];
+  
+  return memberTicket;
+  } else if (ticketInfo.ticketType !== ticketData) {
+    return `Ticket type 'incorrect-type' cannot be found.`
+  } else if (ticketInfo.entrantType !== ticketData) {
+    return `Entrant type 'incorrect-entrant' cannot be found.`
+  } else if (ticketInfo.extras !== ticketData) {
+    return `Extra type 'incorrect-extra' cannot be found.`
+  }
+  
+ }
 /**
  * purchaseTickets()
  * ---------------------
@@ -109,8 +134,16 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
-
+function purchaseTickets(ticketData, purchases) {
+  let generalTicket = 0;
+  
+  if (purchases.ticketType === "general") {
+      generalTicket = ticketData.general.priceInCents[purchases.entrantType];
+      let priceInCents = priceInCents / 100;
+  
+  return `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\nAdult General Admission: $30.00\n-------------------------------------------\nTOTAL: $30.00`
+}
+}
 // Do not change anything below this line.
 module.exports = {
   calculateTicketPrice,
