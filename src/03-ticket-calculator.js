@@ -54,25 +54,24 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {
-  const { ticketType, entrantType, extras}= ticketInfo; 
-  const ticketPrices = ticketData[ticketType];
-  if (!ticketPrices) {
+function calculateTicketPrice(ticketData, { ticketType, entrantType, extras }) {
+  if (!ticketData.hasOwnProperty(ticketType)) {
     return `Ticket type '${ticketType}' cannot be found.`;
-  }
-  const ticketPrice = ticketPrices[entrantType];
-  if (!ticketPrice) {
+  } else if (!ticketData[ticketType].priceInCents.hasOwnProperty(entrantType)) {
     return `Entrant type '${entrantType}' cannot be found.`;
-  }
-  let totalPrice = ticketPrice;
-  for (const extra of extras) {
-    const extraPrice = ticketData.extras[extra];
-    if (!extraPrice) {
-      return `Extra '${extra}' cannot be found.`;
+  } else {
+    let price = ticketData[ticketType].priceInCents[entrantType];
+
+    for (const extra of extras) {
+      if (!ticketData.extras.hasOwnProperty(extra)) {
+        return `Extra type '${extra}' cannot be found.`;
+      } else {
+        price += ticketData.extras[extra].priceInCents[entrantType];
+      }
     }
-    totalPrice += extraPrice;
+
+    return price;
   }
-  return totalPrice;
 }
 
 /**
@@ -128,30 +127,34 @@ function calculateTicketPrice(ticketData, ticketInfo) {
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-    
-    function purchaseTickets(ticketData, purchases) {
-      let receipt = "Thank you for visiting the Dinosaur Museum!\n";
-      let line = "-------------------------------------------\n";
-      let total = 0;
-      for (let purchase of purchases) {
-        let { ticketType, entrantType, extras } = purchase;
-        let ticketPrice = calculateTicketPrice(ticketData, ticketType, entrantType, extras);
-        if (ticketPrice === "Ticket type '" + ticketType + "' cannot be found.") {
-          return ticketPrice;
-        }
-        if (ticketPrice === "Entrant type '" + entrantType + "' cannot be found.") {
-          return ticketPrice;
-        }
-        total += ticketPrice;
-        receipt +=
-          entrantType.charAt(0).toUpperCase() + entrantType.slice(1) + " " + ticketType + " Admission: $" + ticketPrice.toFixed(2) + "\n";
-      }
-      receipt += line + "TOTAL: $" + total.toFixed(2);
-      return receipt;
 
-   }
-    
-    
+function purchaseTickets(ticketData, purchases) {
+  let totalCost = 0;
+  let receipt =
+    "Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\n";
+  for (let purchase of purchases) {
+    let cost = calculateTicketPrice(ticketData, purchase);
+    if (typeof cost !== "number") return cost;
+    totalCost += cost;
+    let entrant =
+      purchase.entrantType[0].toUpperCase() + purchase.entrantType.slice(1);
+    let ticket =
+      purchase.ticketType[0].toUpperCase() + purchase.ticketType.slice(1);
+    let extras = "";
+    if (purchase.extras.length > 0) {
+      extras = ` (${purchase.extras
+        .map((extra) => ticketData.extras[extra].description)
+        .join(", ")})`;
+    }
+    receipt += `${entrant} ${ticket} Admission: $${(cost / 100).toFixed(
+      2
+    )}${extras}\n`;
+  }
+  receipt += `-------------------------------------------\nTOTAL: $${(
+    totalCost / 100
+  ).toFixed(2)}`;
+  return receipt;
+}
 
 // Do not change anything below this line.
 module.exports = {
