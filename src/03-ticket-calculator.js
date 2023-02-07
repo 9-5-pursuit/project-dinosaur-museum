@@ -54,7 +54,40 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  
+  
+  let { ticketType, entrantType, extras } = ticketInfo;
+
+  if (!ticketData[ticketType])
+    return `Ticket type '${ticketType}' cannot be found.`;
+// returning the price of the ticket
+  
+  if (!ticketData[ticketType]["priceInCents"][entrantType])
+    return `Entrant type '${entrantType}' cannot be found.`;
+// returning the price of the entrant
+ 
+  let basePrice = ticketData[ticketType]["priceInCents"][entrantType];
+
+  let extrasPrice = 0;
+
+  for (let extra of extras) {
+  
+    if (!ticketData["extras"][extra]) {
+      return `Extra type '${extra}' cannot be found.`;
+      // returning the price of the extra
+    }
+  
+    else {
+      extrasPrice += ticketData["extras"][extra]["priceInCents"][entrantType];
+      // if the extra is found, the price of the entrant is added
+    }
+  }
+
+
+  return basePrice + extrasPrice;
+  // returning the price of the ticket and the price of the entrant
+}
 
 /**
  * purchaseTickets()
@@ -109,7 +142,52 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function purchaseTickets(ticketData, purchases) {
+  
+  // checking to see if the ticket type is Included
+  if (!ticketData.hasOwnProperty(ticketInfo.ticketType)) {
+    return `Ticket type '${ticketInfo.ticketType}' cannot be found.`;
+    // return the ticket cannot be found
+  } else if (
+    !ticketData[ticketInfo.ticketType].priceInCents.hasOwnProperty(
+      ticketInfo.entrantType
+    )// checking to see that the entrant type is not Included
+  ) {
+    return `Entrant type '${ticketInfo.entrantType}' cannot be found.`;
+  } else if (
+    ticketData.hasOwnProperty(ticketInfo.ticketType) &&
+    ticketData[ticketInfo.ticketType].priceInCents.hasOwnProperty(
+      ticketInfo.entrantType
+    )
+  ) {
+    // checking to see if the entrant type is Included
+    if (ticketInfo.extras.length === 0) {
+      return ticketData[ticketInfo.ticketType].priceInCents[
+        ticketInfo.entrantType
+      ];
+    } else {
+    
+      let price =
+        ticketData[ticketInfo.ticketType].priceInCents[ticketInfo.entrantType];
+
+      
+      for (let i = 0; i < ticketInfo.extras.length; i++) {
+        if (!ticketData.extras.hasOwnProperty(ticketInfo.extras[i])) {
+          return `Extra type '${ticketInfo.extras}' cannot be found.`;
+        } else {
+          price +=
+            ticketData.extras[ticketInfo.extras[i]].priceInCents[
+              ticketInfo.entrantType
+            ];
+        }
+      }
+
+      return price;
+      // returning the price of the ticket and the price of entry in the ticket data.
+    }
+  }
+}
+
 
 // Do not change anything below this line.
 module.exports = {
