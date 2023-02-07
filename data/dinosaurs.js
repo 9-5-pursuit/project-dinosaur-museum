@@ -2,7 +2,7 @@ const dinosaurs = [
   {
     dinosaurId: "YLtkN9R37",
     name: "Allosaurus",
-    pronunciation: "AL-oh-sore-us",
+    dinosaurs: "AL-oh-sore-us",
     meaningOfName: "other lizard",
     diet: "carnivorous",
     lengthInMeters: 12,

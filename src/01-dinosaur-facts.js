@@ -23,20 +23,27 @@ const exampleDinosaurData = require("../data/dinosaurs");
  *  //> { Brachiosaurus: 98.43 }
  */
 function getLongestDinosaur(dinosaurs) {
-  
+  // if no dinosaur return empty object
   if (dinosaurs.length === 0) {
     return {};
   }
+  // set dinosaur height is equal to zero
   let tallest = 0;  
+  // set dinosaur name is empty string
   let tallestName = " ";
+  // set empty onject for the dinosaur
   let object = {};
-
+// loop through the dinosaur
   for (let i = 0; i < dinosaurs.length; i++) {
+    // compare the dinosaur height with dinosaur array
     if (dinosaurs[i].lengthInMeters > tallest) {
+      // set the tallest dinosaur to the variable tallest
     tallest = dinosaurs[i].lengthInMeters;
+    // set the tallest dinosaur name
     tallestName = dinosaurs[i].name;
   }
 }
+// return the tallest dinosaur name key with tallest height value
 object[tallestName] = tallest * 3.281;
 return object;
 
@@ -64,17 +71,16 @@ return object;
  *  //> "A dinosaur with an ID of 'incorrect-id' cannot be found."
  */
 function getDinosaurDescription(dinosaurs, id) {
-  
-  for (let i = 0; i < dinosaurs.length; i++) {
-    
-    if (dinosaurs[i].dinosaurId === id) {
-      return `${dinosaurs[i].name} (${dinosaurs[i].pronunciation})\n${dinosaurs[i].info} It lived in the ${dinosaurs[i].period} period, over ${dinosaurs[i].mya[dinosaurs[i].mya.length - 1]} million years ago.`
-      
-    } if (id === "incorrect-id") {
-      return `A dinosaur with an ID of 'incorrect-id' cannot be found.`
+  // set the variable description for incorrect dinosaur id
+  let description = `A dinosaur with an ID of 'incorrect-id' cannot be found.`;
+  // loop through the dinosaur
+  for (let dino of dinosaurs) {
+    // if the dinosaur id equals
+    if (dino.dinosaurId === id) {
+      description = `${dino.name} (${dino.pronunciation})\n${dino.info} It lived in the ${dino.period} period, over ${dino.mya[dino.mya.length - 1]} million years ago.`;
     }
-    } 
-  
+  } // if id doesnot match return the error message
+  return description;
 }
 
 /**
@@ -103,30 +109,35 @@ function getDinosaurDescription(dinosaurs, id) {
  *  //> ["WHQcpcOj0G"]
  */
 function getDinosaursAliveMya(dinosaurs, mya, key) {
-array =[];
-for (let i = 0; i < dinosaurs.length; i++) {
-  if (dinosaurs[i].mya.length === 2) {
-    if (dinosaurs[i].mya[1] < mya && dinosaurs[i].mya[0] > mya) {
-    if(!key) {
-      array.push(dinosaurs[i].dinosaurId);
-    } else 
-      array.push(dinosaurs[i].key)
-    }
-    } 
-    if (dinosaurs[i].mya.length === 1) {
-    if (dinosaurs[i].mya === mya || dinosaurs[i].mya.length - 1 === mya) {
-    if(!key) {
-      array.push(dinosaurs[i].dinosaurId);
-    } else if (dinosaurs[i].includes(key)) {
-      array.push(dinosaurs[i].key);
-    } else {
-      array.push(dinosaurs[i].dinosaurId);
-    }
+  // set an empty array for the alive dinosaurs
+  let alive = [];
+  // loop through the dinosaur
+  for (let i = 0; i < dinosaurs.length; i++) {
+    let element = dinosaurs[i];
+    if (element.mya.length === 1) {
+      // If the dinosaur only has a single value for `mya`, allows for the `mya` value to be equal to the given value or one less
+      if (element.mya[0] === mya || element.mya[0] - 1 === mya) {
+        // return the key if alive
+        if (element.hasOwnProperty(key)) {
+          alive.push(element[key]);
+        } else {
+          // return id if not alive
+          alive.push(element.dinosaurId);
+        }
+      }
+    } else { // mya is less than first value and greater than the second value
+      if (element.mya[1] <= mya && mya <= element.mya[0]) {
+        if (element.hasOwnProperty(key)) {
+          // return the key if alive
+          alive.push(element[key]);
+        } else {
+          // return id if not alive
+          alive.push(element.dinosaurId);
+        }
+      }
     }
   }
-  
-}
-return array;
+  return alive;
 }
 
 module.exports = {
