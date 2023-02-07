@@ -22,7 +22,25 @@ const exampleDinosaurData = require("../data/dinosaurs");
  *  getLongestDinosaur(dinosaurs);
  *  //> { Brachiosaurus: 98.43 }
  */
-function getLongestDinosaur(dinosaurs) {}
+function getLongestDinosaur(dinosaurs) {
+// Returns empty object if there are no dinosaurs.
+if (dinosaurs.length < 1) {
+  return {};
+}
+//Setup variables for later use.
+let dinoLength = 0;
+let dinoName = "";
+//Loop through the dinosaurs array.
+for (const dino of dinosaurs) {
+  //Compares the length of the dinosaur to the current dinoLength updates both variables accordingly.
+  if (dino.lengthInMeters > dinoLength){
+    dinoLength = dino.lengthInMeters;
+    dinoName = dino.name;
+  }
+}
+//Return the object with its key:value pair.
+return {[dinoName]: dinoLength * 3.281};
+}
 
 /**
  * getDinosaurDescription()
@@ -44,7 +62,22 @@ function getLongestDinosaur(dinosaurs) {}
  *  getDinosaurDescription(dinosaurs, "incorrect-id");
  *  //> "A dinosaur with an ID of 'incorrect-id' cannot be found."
  */
-function getDinosaurDescription(dinosaurs, id) {}
+function getDinosaurDescription(dinosaurs, id) {
+  // Set the variable to the error message.
+  let dinoString = `A dinosaur with an ID of '${id}' cannot be found.`;
+  // loop through the dinosaurs array.
+  for (let i = 0; i < dinosaurs.length; i++) {
+    const element = dinosaurs[i];
+    // if the ID is found update the dinoString variable.
+    if (element.id === id) {
+      dinoString =
+        `${element.name} (${element.pronunciation})\n${element.info}. It lived in the ${element.period} period, over ${element.mya[element.mya.length - 1]} million years ago.`;
+    }
+  }
+  // Return the string.
+    return dinoString;
+    //P.S. ^^The above the function doesn't pass two test cases I can't figure out why it does. If you can figure it out, please let me know.
+}
 
 /**
  * getDinosaursAliveMya()
@@ -71,7 +104,37 @@ function getDinosaurDescription(dinosaurs, id) {}
  *  getDinosaursAliveMya(dinosaurs, 65, "unknown-key");
  *  //> ["WHQcpcOj0G"]
  */
-function getDinosaursAliveMya(dinosaurs, mya, key) {}
+function getDinosaursAliveMya(dinosaurs, mya, key) {
+  //Create an empty array to store the values.
+let arr = [];
+// Loop through the dinosaurs array.
+for (const dino of dinosaurs) {
+  // If the dinosaur only has a single value for `mya`, allows for the `mya` value to be equal to the given value or one less.
+  if (dino.mya.length === 1 && (dino.mya[0] === mya || dino.mya[0] - 1 === mya)) {
+    //Checks if the key parameter is and if it exist in the dinosaur object. Note !! && hasOwnProperty() do the same thing.
+    if (key && !!dino[key]) {
+      // If the key exists, push the value of the key into the array.
+      arr.push(dino[key]);
+    } else {
+      // If the key does not exist, push the ID into the array.
+      arr.push(dino.dinosaurId);
+    }
+  }
+  //If the dinosaur has more than one value for `mya`.
+  if (mya <= dino.mya[0] && mya >= dino.mya[1]) {
+    //Checks if the key parameter is and if it exist in the dinosaur object. 
+    if (key && !!dino[key]) {
+      // If the key exists, push the value of the key into the array.
+      arr.push(dino[key]);
+    } else {
+      // If the key does not exist, push the ID into the array.
+      arr.push(dino.dinosaurId);
+    }
+  }
+}
+// Return the  updated array.
+return arr;
+}
 
 module.exports = {
   getLongestDinosaur,
