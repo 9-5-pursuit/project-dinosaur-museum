@@ -54,8 +54,40 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+   // Extract keys from ticketInfo with destructuring
+   // let ticketType = ticketInfo.ticketType
+   let { ticketType, entrantType, extras } = ticketInfo;
 
+   // ticket type does not match an existing ticket type
+   if (!ticketData[ticketType])
+     return `Ticket type '${ticketType}' cannot be found.`;
+ 
+   // entrant type does not match an existing entrant type
+   if (!ticketData[ticketType]["priceInCents"][entrantType])
+     return `Entrant type '${entrantType}' cannot be found.`;
+ 
+   // Retrieve the base price by navigating the ticketData object
+   let basePrice = ticketData[ticketType]["priceInCents"][entrantType];
+   // Setup an accumulator for the extras pricing since it's an array of options
+   let extrasPrice = 0;
+   // Run through all the extras options
+   for (let extra of extras) {
+     // Short circuit the function with an error message if an extra doesn't exist.
+     if (!ticketData["extras"][extra]) {
+       return `Extra type '${extra}' cannot be found.`;
+     }
+     // Otherwise update the extras price by traversing the ticketData object
+     else {
+       extrasPrice += ticketData["extras"][extra]["priceInCents"][entrantType];
+     }
+   }
+ 
+   // Final value should be the total of the base price and extras price
+   return basePrice + extrasPrice;
+ }
+  
+ 
 /**
  * purchaseTickets()
  * ---------------------
@@ -109,8 +141,59 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function purchaseTickets(ticketData, purchases) {
+let lineItems = "";
+let totalCost = 0;
+for (let purchase of purchases) {
+  
+  // using the previous calculateTicketPrice function store the price in a variable. It should also return an error if a ticketType or entrantType or extra is not found
+  let purchasePrice = calculateTicketPrice(ticketData, purchase);
 
+  // check the type of purchasePrice to see if we got an error. if so stop the function and return erroe.
+  if (typeof purchasePrice === "string") return purchasePrice;
+
+  // setup an accumulator for this line item string
+  let purchaseLineItem = "";
+
+  // formatted example
+  // Adult General Admission: $50.00 (Movie Access, Terrace Access)
+
+  // get the entratType and format the first letter capitalized
+  let entrantType = purchase.entrantType[0].toUpperCase() + purchase.entrantType.slice(1).toLowerCase();
+
+  // get the ticketType and format the first letter capitalized
+  let ticketType = purchase.ticketType[0].toUpperCase() + purchase.ticketType.slice(1).toLowerCase();
+
+  // update the purchaseLineItem to include the ticket information we already have entrant type, ticket type, price
+  purchaseLineItem += `${entrantType} ${ticketType} Admission: $${(purchasePrice / 100).toFixed(2)}`;
+
+  // check if we have any extras
+  if (purchase.extras.length > 0) {
+    // set up an accumulator for the extras string
+    let extras = "";
+    for (let i = 0; i < purchase.extras.length; i++) {
+      let extra = purchase.extras[i];
+      extras += extra[0].toUpperCase() + extra.slice(1).toLowerCase() + " Access";
+
+      // if we are not on the last item in the array add a comma and space
+      if (i < purchase.extras.length - 1) {
+        extras += ", ";
+      }
+    }
+    // add our extras to the purchase line item
+    // update format to match 
+    purchaseLineItem += ` (${extras})`;
+  }
+  // add our line spacer when we are done building the purchase line item
+  purchaseLineItem += "\n";
+
+  // update lineItems and totalCost accumulator
+  lineItems += purchaseLineItem;
+  totalCost += purchasePrice;
+  //console.log(lineItems)
+}
+ return `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\n${lineItems}-------------------------------------------\nTOTAL: $${(totalCost / 100).toFixed(2)}`;
+}
 // Do not change anything below this line.
 module.exports = {
   calculateTicketPrice,
