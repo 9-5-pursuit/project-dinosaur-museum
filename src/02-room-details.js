@@ -26,20 +26,40 @@ const exampleRoomData = require("../data/rooms");
  *  //> "Dinosaur with name 'Pterodactyl' cannot be found."
  */
 function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
-  let roomId;
-  for (const dinosaur of dinosaurs) {
+  let roomName = null;
+  let dinosaurIndex = null;
+// return an error message if the dinosaur does not exist
+  for (let i = 0; i < dinosaurs.length; i++) { 
+    // checking to see if the dinosaur exists in the dinosaurs 
+    let dinosaur = dinosaurs[i];
+    
     if (dinosaur.name === dinosaurName) {
-      roomId = dinosaur.roomId;
-      break;
+    
+      dinosaurIndex = dinosaur.dinosaurId;
+    } 
+  } 
+   if (!dinosaurIndex) {
+    
+    return `Dinosaur with name '${dinosaurName}' cannot be found.`;
+   // return an error message if the dinosaur cannot be found in any room
+  }  
+    for (let j = 0; j < rooms.length; j++) {
+      let room = rooms[j];
+
+      if (room.dinosaurs.includes(dinosaurIndex)) {
+        roomName = room.name;
+      }
     }
-  }
-  for (const room of rooms) {
-    if (room.dinosaurs.includes(roomId)) {
-      return room.name;
+
+    if(!roomName) {
+      return `Dinosaur with name '${dinosaurName}' cannot be found in any rooms.`;
+   // return an error message if the dinosaur cannot be found in any room
     }
-  }
+     else {
+      // return the name of the room where the dinosaur is located
+      return roomName;
+    }
 }
-  
   
   
 
@@ -68,17 +88,49 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
     ]
  */
 function getConnectedRoomNamesById(rooms, id) {
-  for (let i = 0; i < rooms.length; i++) {
-    if (rooms[i].id === id) {
-      return (rooms[i].name)
-    }
-    }
-    return null
-  }
+  let roomNames = [];
+  let foundRoom = null;
   
+  for (let i = 0; i < rooms.length; i++) {
+   let element = rooms[i];
+
+  if (element.roomId === id) {
+    foundRoom = element
+  }
+ if (!foundRoom) {
+  
+  return `Room with ID of '${id}' could not be found.`;
+}
 
 
+let foundCount = 0;
 
+let targetCount = foundRoom.connectsTo.length;
+
+for (let i = 0; i < rooms.length; i++) {
+  let element = rooms[i];
+  
+  if (foundRoom.connectsTo.indexOf(element.roomId) === -1) {
+    continue;
+
+  } else {
+    roomNames.push(element.name);
+    
+    foundCount++;
+  }
+} if (foundCount !== targetCount) {
+  
+  return `Room with ID of 'incorrect-id' could not be found.`;
+}
+  
+  else {
+   
+    return roomNames;
+  }
+
+  
+}
+}
 module.exports = {
   getRoomByDinosaurName,
   getConnectedRoomNamesById,
@@ -257,4 +309,4 @@ const rooms = [
       "Gp6nCN1JGT", // Reyes Hall
     ],
   },
-];
+]

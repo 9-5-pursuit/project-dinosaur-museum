@@ -102,16 +102,24 @@ function getDinosaurDescription(dinosaurs, id) {
  *  //> ["WHQcpcOj0G"]
  */
 function getDinosaursAliveMya(dinosaurs, mya, key) {
-  let aliveYrs = []
-  for (let i = 0; i < dinosaurs.length; i++) {
-    let time = dinosaurs[i].mya;
-    if (typeof time === 'number' && time >= mya) {
-      aliveYrs.push(dinosaurs[i].dinosaurId)
-    }
-    }
- return aliveYrs
+  let aliveYrs = [];
+  
+  for (let dinosaur of dinosaurs) {
+    if (
+      dinosaur.mya.length === 1 && 
+// if the length of mya is 1, and the dinosaur only has a single value for mya
+      (dinosaur.mya[0] === mya || dinosaur.mya[0] - 1 === mya ) ) {
+      
+      aliveYrs.push(key && !!dinosaur[key] ? dinosaur[key] : dinosaur.dinosaurId);
+      
+    } 
+    if (mya <= dinosaur.mya[0] && mya >= dinosaur.mya[1]) {
+    // if the dinosaur lived during the mya value given, insert that dinosaur into the array
+      aliveYrs.push(key && !!dinosaur[key] ? dinosaur[key] : dinosaur.dinosaurId);
+    } 
 }
-
+return aliveYrs
+}
 module.exports = {
   getLongestDinosaur,
   getDinosaurDescription,
