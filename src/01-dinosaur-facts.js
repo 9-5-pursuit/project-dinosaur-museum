@@ -26,9 +26,10 @@ function getLongestDinosaur(dinosaurs) {
   let obj = {}
   let longestDino = 0
   if (dinosaurs.length === 0){
-    return obj
+    return obj// return empty object
   }
   for (i = 0; i < dinosaurs.length; i++){
+    // checking to see the typeof 
     switch (typeof dinosaurs[i].lengthInMeters){
       case 'number':
        if (dinosaurs[i].lengthInMeters > longestDino) {
@@ -41,7 +42,7 @@ function getLongestDinosaur(dinosaurs) {
   }
   }
 return { 'Brachiosaurus':longestDino * 3.28 }
-}
+}// returns the longest dinosaur
   
 /**
  * getDinosaurDescription()
@@ -68,7 +69,7 @@ function getDinosaurDescription(dinosaurs, id) {
     let secondIndex = (dinosaurs[i].mya.length > 1) ? dinosaurs[i].mya[1] : dinosaurs[i].mya[0] ;
     if(dinosaurs[i].dinosaurId === id) {
       return (`${dinosaurs[i].name} (${dinosaurs[i].pronunciation})\n${dinosaurs[i].info} It lived in the ${dinosaurs[i].period} period, over ${secondIndex} million years ago.`); 
-    }
+    }// returns the dinosaur description 
   } 
 
   
@@ -111,10 +112,10 @@ function getDinosaursAliveMya(dinosaurs, mya, key) {
       (dinosaur.mya[0] === mya || dinosaur.mya[0] - 1 === mya ) ) {
       
       aliveYrs.push(key && !!dinosaur[key] ? dinosaur[key] : dinosaur.dinosaurId);
-      
+      // if the dinosaur only has a single value for mya inset the dinosaur's ID
     } 
     if (mya <= dinosaur.mya[0] && mya >= dinosaur.mya[1]) {
-    // if the dinosaur lived during the mya value given, insert that dinosaur into the array
+    // if the dinosaur lived during the mya value given, insert that dinosaur 
       aliveYrs.push(key && !!dinosaur[key] ? dinosaur[key] : dinosaur.dinosaurId);
     } 
 }

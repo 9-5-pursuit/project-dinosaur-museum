@@ -34,12 +34,12 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
     let dinosaur = dinosaurs[i];
     
     if (dinosaur.name === dinosaurName) {
-    
+    // if the dinosaur exists in the dinosaurs
       dinosaurIndex = dinosaur.dinosaurId;
     } 
-  } 
+  } // if the dinosaur does not exist in the dinosaurs list
    if (!dinosaurIndex) {
-    
+    // if the dinosaur does not exist in the dinosaurs list
     return `Dinosaur with name '${dinosaurName}' cannot be found.`;
    // return an error message if the dinosaur cannot be found in any room
   }  
@@ -90,17 +90,17 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
 function getConnectedRoomNamesById(rooms, id) {
   let roomNames = [];
   let foundRoom = null;
-  
+  // looping the room s
   for (let i = 0; i < rooms.length; i++) {
    let element = rooms[i];
-
+// if room ID is found
   if (element.roomId === id) {
     foundRoom = element
-  }
+  }// update the roomNames 
  if (!foundRoom) {
-  
+  // if room cannot be found
   return `Room with ID of '${id}' could not be found.`;
-}
+}// returns a message if the room cannot be found
 
 
 let foundCount = 0;
@@ -109,24 +109,24 @@ let targetCount = foundRoom.connectsTo.length;
 
 for (let i = 0; i < rooms.length; i++) {
   let element = rooms[i];
-  
+  // if room id found and connected to the room
   if (foundRoom.connectsTo.indexOf(element.roomId) === -1) {
     continue;
 
   } else {
     roomNames.push(element.name);
-    
+    // insert the room name into the room count
     foundCount++;
   }
 } if (foundCount !== targetCount) {
-  
+  // if target count doesnt equal found count
   return `Room with ID of 'incorrect-id' could not be found.`;
-}
+}// returns a message of incorrect-id for rooms that cannot be found
   
   else {
    
     return roomNames;
-  }
+  }// returns the names of the rooms that are connected to the room with the given ID
 
   
 }

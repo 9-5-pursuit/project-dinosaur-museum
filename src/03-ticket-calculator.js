@@ -143,12 +143,15 @@ function calculateTicketPrice(ticketData, ticketInfo) {
     //> "Ticket type 'discount' cannot be found."
  */
 function purchaseTickets(ticketData, purchases) {
+  
+  // checking to see if the ticket type is Included
   if (!ticketData.hasOwnProperty(ticketInfo.ticketType)) {
     return `Ticket type '${ticketInfo.ticketType}' cannot be found.`;
+    // return the ticket cannot be found
   } else if (
     !ticketData[ticketInfo.ticketType].priceInCents.hasOwnProperty(
       ticketInfo.entrantType
-    )
+    )// checking to see that the entrant type is not Included
   ) {
     return `Entrant type '${ticketInfo.entrantType}' cannot be found.`;
   } else if (
@@ -157,6 +160,7 @@ function purchaseTickets(ticketData, purchases) {
       ticketInfo.entrantType
     )
   ) {
+    // checking to see if the entrant type is Included
     if (ticketInfo.extras.length === 0) {
       return ticketData[ticketInfo.ticketType].priceInCents[
         ticketInfo.entrantType
@@ -179,6 +183,7 @@ function purchaseTickets(ticketData, purchases) {
       }
 
       return price;
+      // returning the price of the ticket and the price of entry in the ticket data.
     }
   }
 }
