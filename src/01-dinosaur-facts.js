@@ -81,8 +81,6 @@ function getDinosaurDescription(dinosaurs, id) {
  
   }
    
- 
- 
   }
       return `A dinosaur with an ID of 'incorrect-id' cannot be found.`;
 }
@@ -128,8 +126,8 @@ if ((dinosaurs[x].mya.length === 1) && (dinosaurs[x].mya[0]=== mya || dinosaurs[
         } else {
          result.push(dinosaurs[x].dinosaurId);
         }
-      }
-  if (dinosaurs[x].mya[1] <= mya && dinosaurs[x].mya[0] <= mya) {
+      }else
+  if (dinosaurs[x].mya[1] <= mya && mya <= dinosaurs[x].mya[0]) {
         if(dinosaurs[x].hasOwnProperty(key)) {
           result.push(dinosaurs[x].[key]);
         } else {
