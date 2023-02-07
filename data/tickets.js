@@ -16,7 +16,7 @@ const tickets = {
     },
   },
   extras: {
-    movie: {
+    movie: {  
       description: "Movie Access",
       priceInCents: {
         child: 1000,
