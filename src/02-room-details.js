@@ -25,7 +25,36 @@ const exampleRoomData = require("../data/rooms");
  *  getRoomByDinosaurName(dinosaurs, rooms, "Pterodactyl");
  *  //> "Dinosaur with name 'Pterodactyl' cannot be found."
  */
-function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
+function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
+  
+  let roomByDinosaurName, dinoId;
+  //console.log(rooms)
+  for (let x = 0; x < dinosaurs.length; x++) {
+    if (dinosaurs[x].name === dinosaurName) {
+      dinoId = dinosaurs[x].dinosaurId;
+    }
+  }
+  for (let y = 0; y < rooms.length; y++) {
+    if (rooms[y].dinosaurs.includes(dinoId)) {
+      roomByDinosaurName = rooms[y].name;
+    }
+  }
+  if (!dinoId) {
+    return `Dinosaur with name '${dinosaurName}' cannot be found.`;
+  } else if (!roomByDinosaurName) {
+    return `Dinosaur with name '${dinosaurName}' cannot be found in any rooms.`;
+  } else {
+    return roomByDinosaurName;
+  }
+}
+
+  
+
+    
+  // console.log(dinoRoom)
+
+// return "Dinosaur with name 'Pterodactyl' cannot be found."
+// }
 
 /**
  * getConnectedRoomNamesById()
@@ -49,7 +78,43 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
       "Kit Hopkins Education Wing"
     ]
  */
-function getConnectedRoomNamesById(rooms, id) {}
+function getConnectedRoomNamesById(rooms, id) {
+
+// console.log(rooms)
+  let result = [];
+  let foundRoom = null;
+
+  for (let i = 0; i < rooms.length; i++) {
+    // Find room with matching roomId
+    const element = rooms[i]
+    if (element.roomId === id) {
+      foundRoom = element;
+    } 
+    if (!foundRoom) {
+      // console.log(rooms[y])
+      return `Room with ID of '${id}' could not be found.`;
+    } // return arrayOfRoomNames;
+  }
+   let findingCount = 0;
+    let targetRoom = foundRoom.connectsTo.length;
+   for (let j = 0; j < rooms.length; j++){ 
+    let element = rooms[j];
+    if (foundRoom.connectsTo.indexOf(element.roomId) === -1) {
+    continue;
+   } else {
+    result.push(element.name);
+    findingCount++;
+    }
+    if (findingCount !== targetRoom) {
+      return "Room with ID of 'incorrect-id' could not be found.";
+    } else {
+      return result;
+    }
+  }
+}
+
+
+
 
 module.exports = {
   getRoomByDinosaurName,
