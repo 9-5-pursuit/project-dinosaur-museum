@@ -80,20 +80,37 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
  */
 function getConnectedRoomNamesById(rooms, id) {
 
-// npconsole.log(rooms)
-let arrayOfRoomNames = [], connectedRoom = []
+// console.log(rooms)
+  let result = [];
+  let foundRoom = null;
 
-  for (let y = 0; y < rooms.length; y++) {
+  for (let i = 0; i < rooms.length; i++) {
     // Find room with matching roomId
-    if (rooms[y].roomId === id) {
-      arrayOfRoomNames.push(rooms[y].connectsTo);
-    } else {
+    const element = rooms[i]
+    if (element.roomId === id) {
+      foundRoom = element;
+    } 
+    if (!foundRoom) {
       // console.log(rooms[y])
+      return `Room with ID of '${id}' could not be found.`;
+    } // return arrayOfRoomNames;
+  }
+   let findingCount = 0;
+    let targetRoom = foundRoom.connectsTo.length;
+   for (let j = 0; j < rooms.length; j++){ 
+    let element = rooms[j];
+    if (foundRoom.connectsTo.indexOf(element.roomId) === -1) {
+    continue;
+   } else {
+    result.push(element.name);
+    findingCount++;
+    }
+    if (findingCount !== targetRoom) {
       return "Room with ID of 'incorrect-id' could not be found.";
-      // return arrayOfRoomNames;
+    } else {
+      return result;
     }
   }
-return arrayOfRoomNames;
 }
 
 
