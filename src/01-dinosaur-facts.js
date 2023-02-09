@@ -121,19 +121,50 @@ return result;
  */
 
 // default value is array
+// mya -> millions of yrs ago
 // key param includes dinos that lived during mya, otherwise returns dino id
+// should return the ids of all dinos that were alive approx at the given time
+// should include dinos with only one mya year
+// if mya key is an array of one #, should allow for 1 mya less than the amount
+// should return empty array if year does not match any
+// if 3rd arg is set should replace ids w the val of the given key
+// loop through dino array and return array of dinos who were alive at the given mya val
+
 
 
 function getDinosaursAliveMya(dinosaurs, mya, key) {
 
-// let result = [];
+let result = [];
 
-// for (let dino of dinosaurs) {
-
-// }
-
-// return result;
+for (let dino of dinosaurs) {
+  // console.log(dino); // logs entire dinosaurs array
+  if (dino.mya.length === 1) { // if mya is single val
+    // console.log(dino.mya);
+    if (dino.mya[0] === mya || dino.mya[0] - 1 === mya) { // if dino only has one val for mya, mya val can be equal to given val or one less
+      if (key && !!dino[key]) {
+        result.push(dino[key]); // initial val is [];
+      } else {
+        result.push(dino.dinosaurId);
+        // only adds id to result array
+      }
+    }
+  }
+  // console.log(result);
+// if (mya <= dino.mya.length) <- this is wrong sorry
+  if (mya <= dino.mya[0] && mya >= dino.mya[1]) { // for dino obj with mya val more than one
+    if (key && !!dino[key]) {
+      result.push(dino[key]);
+    } else {
+      result.push(dino.dinosaurId);
+    }
+  }
+  // console.log(result);
 }
+
+return result;
+}
+
+// console.log(getDinosaursAliveMya(exampleDinosaurData));
 
 module.exports = {
   getLongestDinosaur,

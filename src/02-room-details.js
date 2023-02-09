@@ -140,7 +140,7 @@ for (let i = 0; i < rooms.length; i++) {
   }
   // console.log(roomCheck);
 
- // i got stuck here so i used the answer from the review but am commenting out my old answer so you guys can still see it.
+ // i got stuck here so i used the answer from the review but im commenting out my old answer so you guys can still see it.
 
  /* for (let i = 0; i < id.length; i++) {
     const roomsArr = id[i];
@@ -153,6 +153,8 @@ for (let i = 0; i < rooms.length; i++) {
     console.log(roomCheck);
   }
 */
+
+// review answer
 
 let foundCount = 0;
 let targetRoomCount = roomCheck.connectsTo.length;
@@ -174,7 +176,6 @@ for (let i = 0; i < rooms.length; i++) {
   } else {
     return idCheck;
   }
-
 
 }
 
