@@ -26,7 +26,7 @@ const exampleRoomData = require("../data/rooms");
  *  //> "Dinosaur with name 'Pterodactyl' cannot be found."
  */
 
-// default value is string - error msg ?
+// default value is string - error msg ? <- nevermind
 // returns name of room where given dino can be found, if it doesnt exist return error msg
 // `Dinosaur with name 'Pterodactyl' cannot be found.` <- replace pterodactyl with ${dinosaurName}
 // two variables, one for dinosaur id and one for room
@@ -45,7 +45,9 @@ for (let i = 0; i < dinosaurs.length; i++) {
     dinoId = dinoArr.dinosaurId;
   }
   // console.log(dinoId);
-} // else
+} // else {
+  
+// }
 
   if (!dinoId) {
     return `Dinosaur with name '${dinosaurName}' cannot be found.`;
@@ -104,7 +106,79 @@ for (let r = 0; r < rooms.length; r++) {
       "Kit Hopkins Education Wing"
     ]
  */
-function getConnectedRoomNamesById(rooms, id) {}
+
+
+// returns array of strings, each string is the name of a room connected to given room name
+// if room id cant be found, returns error msg
+// "should return the names of all rooms connected to the given room by ID"
+// "should work for other rooms"
+// "if initial room ID is incorrect, should return an error message"
+// "if connected room ID is incorrect, should return an error message"
+// error msg - "Room with ID of 'incorrect-id' could not be found."
+// loop that goes through rooms array and checks for room ids and returns array of strings
+// two initial variables needed, one for rooms and one for id (?)
+
+function getConnectedRoomNamesById(rooms, id) {
+
+let roomCheck = null; // either null or undefined
+let idCheck = [];
+
+for (let i = 0; i < rooms.length; i++) {
+  const roomsArr = rooms[i];
+  // console.log(roomsArr);
+  // logged entire rooms array
+  if (roomsArr.roomId === id) {
+    // roomsArr.roomId === id
+    // console.log(roomsArr);
+    roomCheck = roomsArr
+    // console.log(roomsArr);
+  }
+}
+
+  if (!roomCheck) {
+    return `Room with ID of 'incorrect-id' could not be found.`
+  }
+  // console.log(roomCheck);
+
+ // i got stuck here so i used the answer from the review but am commenting out my old answer so you guys can still see it.
+
+ /* for (let i = 0; i < id.length; i++) {
+    const roomsArr = id[i];
+    // console.log(roomsArr.connectsTo);
+    // connectsTo -> connected rooms
+    if (roomsArr.connectsTo) {
+      idCheck.push(roomsArr.name)
+      roomCheck++;
+    }
+    console.log(roomCheck);
+  }
+*/
+
+let foundCount = 0;
+let targetRoomCount = roomCheck.connectsTo.length;
+
+
+for (let i = 0; i < rooms.length; i++) {
+  const roomsArr = rooms[i];
+
+    if (roomCheck.connectsTo.indexOf(roomsArr.roomId) === -1) {
+      continue;
+    } else {
+      idCheck.push(roomsArr.name);
+      foundCount++
+    }
+}
+
+  if (foundCount !== targetRoomCount) {
+    return `Room with ID of 'incorrect-id' could not be found.`;
+  } else {
+    return idCheck;
+  }
+
+
+}
+
+// console.log(getConnectedRoomNamesById(exampleDinosaurData, exampleRoomData));
 
 module.exports = {
   getRoomByDinosaurName,
