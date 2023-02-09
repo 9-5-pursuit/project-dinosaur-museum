@@ -22,7 +22,35 @@ const exampleDinosaurData = require("../data/dinosaurs");
  *  getLongestDinosaur(dinosaurs);
  *  //> { Brachiosaurus: 98.43 }
  */
-function getLongestDinosaur(dinosaurs) {}
+function getLongestDinosaur(dinosaurs) {
+  if (dinosaurs.length < 1) {
+    return {};
+  }
+
+  // loop to find longest dinosaur
+  // meters to feet = ft * 3.281
+
+  // for (dinosaurs.lengthInMeters of dinosaurs) {
+  //   for (let)
+  // }
+
+  let longestDino = 0;
+  let longestDinoName = "";
+
+  for (let dino of dinosaurs) {
+    if (dino.lengthInMeters > longestDino) {
+      longestDino = dino.lengthInMeters;
+      longestDinoName = dino.name;
+    }
+    
+  }
+
+  // console.log(longestDino);
+  // console.log(longestDinoName);
+
+  return { [longestDinoName]: longestDino * 3.281 };
+
+}
 
 /**
  * getDinosaurDescription()
@@ -44,8 +72,28 @@ function getLongestDinosaur(dinosaurs) {}
  *  getDinosaurDescription(dinosaurs, "incorrect-id");
  *  //> "A dinosaur with an ID of 'incorrect-id' cannot be found."
  */
-function getDinosaurDescription(dinosaurs, id) {}
 
+// returns desc of dinosaur, if dino id invalid returns error msg
+// use \n for new line in text
+// default value should be error message?
+// error message: `A dinosaur with an ID of 'incorrect-id' cannot be found.`
+// function should loop thru dinosaur obj to find id and return desc, if desc cant be found return error msg
+
+function getDinosaurDescription(dinosaurs, id) {
+
+let result = `A dinosaur with an ID of 'incorrect-id' cannot be found.`;
+
+for (let dino of dinosaurs) {
+  if (dino.dinosaurId === id) {
+    result = `${dino.name} (${dino.pronunciation})\n${dino.info} It lived in the ${dino.period} period, over ${dino.mya[dino.mya.length - 1]} million years ago.`;
+  }
+}
+
+return result;
+
+}
+
+// console.log(getDinosaurDescription(exampleDinosaurData, "GGvO1X9Zeh"));
 /**
  * getDinosaursAliveMya()
  * ---------------------
@@ -71,7 +119,21 @@ function getDinosaurDescription(dinosaurs, id) {}
  *  getDinosaursAliveMya(dinosaurs, 65, "unknown-key");
  *  //> ["WHQcpcOj0G"]
  */
-function getDinosaursAliveMya(dinosaurs, mya, key) {}
+
+// default value is array
+// key param includes dinos that lived during mya, otherwise returns dino id
+
+
+function getDinosaursAliveMya(dinosaurs, mya, key) {
+
+// let result = [];
+
+// for (let dino of dinosaurs) {
+
+// }
+
+// return result;
+}
 
 module.exports = {
   getLongestDinosaur,

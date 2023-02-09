@@ -25,8 +25,63 @@ const exampleRoomData = require("../data/rooms");
  *  getRoomByDinosaurName(dinosaurs, rooms, "Pterodactyl");
  *  //> "Dinosaur with name 'Pterodactyl' cannot be found."
  */
-function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {}
 
+// default value is string - error msg ?
+// returns name of room where given dino can be found, if it doesnt exist return error msg
+// `Dinosaur with name 'Pterodactyl' cannot be found.` <- replace pterodactyl with ${dinosaurName}
+// two variables, one for dinosaur id and one for room
+// first make a loop that goes through dino array and sees if the dinosaur with that id exists
+// if statement - if id is valid returns room, else returns the error msg
+
+function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
+let dinoId = null;
+let dinoRoomName = null;
+
+for (let i = 0; i < dinosaurs.length; i++) {
+  // goes through dino array
+  const dinoArr = dinosaurs[i];
+  // console.log(dinoArr);
+  if (dinoArr.name === dinosaurName) {
+    dinoId = dinoArr.dinosaurId;
+  }
+  // console.log(dinoId);
+} // else
+
+  if (!dinoId) {
+    return `Dinosaur with name '${dinosaurName}' cannot be found.`;
+  }
+
+  // console.log(dinoId);
+
+for (let r = 0; r < rooms.length; r++) {
+  // if id exists, returns room
+  const dinoArr = rooms[r];
+  // console.log(dinoArr);
+  if (dinoArr.dinosaurs.includes(dinoId)) {
+     // .includes()
+    // console.log(dinoArr);
+    // console.log(dinoId);
+    dinoRoomName = dinoArr.name;
+    // console.log(dinoRoomName);
+  }
+  // console.log(dinoRoomName);
+}
+
+// console.log(dinoRoomName);
+  if (!dinoRoomName) {
+    return `Dinosaur with name '${dinosaurName}' cannot be found in any rooms.`
+  } else {
+    return dinoRoomName;
+}
+
+}
+
+
+// console.log(getRoomByDinosaurName(exampleDinosaurData, exampleRoomData))
+
+
+
+// console.log(getRoomByDinosaurName(exampleDinosaurData, exampleRoomData));
 /**
  * getConnectedRoomNamesById()
  * ---------------------
