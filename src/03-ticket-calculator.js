@@ -54,7 +54,33 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) { }
+
+// returns ticket price based on inputted info - number
+// return error msg if ticketInfo.ticketType or ticketInfo.entrantType vals are incorrect, or any vals inside ticketInfo.extras are incorrect
+// error msgs - "Ticket type 'incorrect-type' cannot be found.", "Entrant type 'incorrect-entrant' cannot be found.", "Extra type 'incorrect-extra' cannot be found."
+// ticketData - obj, has data about prices
+// ticketInfo - obj, has data for single ticket
+// .ticketType - str, reps type of ticket, any str except for val "extras"
+// .entrantType - reps type of entrant, prices change dep on entrant (ex. adult, child, etc)
+// .extras - array of strs, each str reps diff "extra" that can be added to ticket
+// default val is 0
+
+function calculateTicketPrice(ticketData, ticketInfo) {
+
+let priceOfTicket = 0;
+
+if (!ticketData.hasOwnProperty(ticketInfo.ticketType)) {
+  // go through error msgs first
+  // console.log(ticketInfo.ticketType);
+  return `Ticket type 'incorrect-type' cannot be found.`; // ${ticketType}
+} else if (!ticketData[ticketInfo.ticketType].priceInCents.hasOwnProperty(ticketInfo.entrantType)) {
+  return `Entrant type 'incorrect-entrant' cannot be found.` // ${entrantType}
+}
+// ticketInfo.ticketType is returning as undefined for some reason??
+
+}
+
+// console.log(calculateTicketPrice(exampleTicketData));
 
 /**
  * purchaseTickets()
