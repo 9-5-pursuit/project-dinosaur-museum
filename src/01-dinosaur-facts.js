@@ -81,10 +81,9 @@ for (let i = 0; i < dinosaurs.length; i++) {
   //ternary to search through millions of years array and return different values based on length
 let mya2 = dinosaurs[i].mya.length;
 let mya = mya2 >= 2 ? dinosaurs[i].mya[1]: dinosaurs[i].mya[0];
-let time = mya2 >= 2 ? `Early` : `Late`;
 // if statement that prints out a string if id is matched
 if (id === dinosaurs[i].dinosaurId) {
-    din = `${`${dinosaurs[i].name} (${dinosaurs[i].pronunciation})\n${dinosaurs[i].info}`} It lived in the ${time} Cretaceous period, over ${mya} million years ago.`;
+    din = `${`${dinosaurs[i].name} (${dinosaurs[i].pronunciation})\n${dinosaurs[i].info}`} It lived in the ${dinosaurs[i].period} period, over ${mya} million years ago.`;
   }
 
 }
@@ -122,10 +121,16 @@ function getDinosaursAliveMya(dinosaurs, mya, key) {
 
 let dino_Array =[];
 for (let i = 0; i < dinosaurs.length; i++){
-if ("Late Jurrassic" === dinosaurs[i].period) {
-  dino_Array.push(dinosaurs[i].dinosaurId)
+
+if (dinosaurs[i].mya[0] === mya || dinosaurs[i].mya[0] -1 === mya) {
+
+  dino_Array.push(key && !!dinosaurs[i][key] ? dinosaurs[i][key] : dinosaurs[i].dinosaurId);
 }
+  if (mya <= dinosaurs[i].mya[0] && mya >= dinosaurs[i].mya[1]) {
+    dino_Array.push(key && !!dinosaurs[i][key] ? dinosaurs[i][key] : dinosaurs[i].dinosaurId);
+  }
 }
+
 return dino_Array;
 
 }
