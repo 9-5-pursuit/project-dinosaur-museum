@@ -5,6 +5,7 @@
 
   Keep in mind that your functions must still have and use a parameter for accepting all tickets.
 */
+const { extras } = require("../data/tickets");
 const exampleTicketData = require("../data/tickets");
 // Do not change the line above.
 
@@ -54,7 +55,26 @@ const exampleTicketData = require("../data/tickets");
     calculateTicketPrice(tickets, ticketInfo);
     //> "Entrant type 'kid' cannot be found."
  */
-function calculateTicketPrice(ticketData, ticketInfo) {}
+function calculateTicketPrice(ticketData, ticketInfo) {
+  let person = ticketInfo.entrantType; // stores the entrant type listed in the ticketInfo parameter.
+  let extras = ticketInfo.extras; // stores the extras array listed in the ticketInfo parameter.
+  if (!ticketData[ticketInfo.ticketType]) { // => returns an error if the ticket type was incorrect.
+    return `Ticket type '${ticketInfo.ticketType}' cannot be found.`;
+  }
+  if (!ticketData[ticketInfo.ticketType].priceInCents[person]) { // => returns an error if the entrant listed in the ticket info was incorrect.
+    return `Entrant type '${person}' cannot be found.`;
+  }
+  let totalPrice = ticketData[ticketInfo.ticketType].priceInCents[person]; // stores the price of the ticket before adding extras.
+  if (extras) {
+    for (const extra of extras) { // => adds the price of each extra in the extras array.
+      if (!ticketData.extras.hasOwnProperty(extra)) { // => if the extra does not exist in the array of extras within the ticketdata parameter, this returns an error.
+        return `Extra type '${extra}' cannot be found.`;
+      }
+      totalPrice += ticketData.extras[extra].priceInCents[person];
+    }
+  }
+  return totalPrice;
+}
 
 /**
  * purchaseTickets()
@@ -109,7 +129,31 @@ function calculateTicketPrice(ticketData, ticketInfo) {}
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function purchaseTickets(ticketData, purchases) {
+  let price; // stores the price of each ticket.
+  let finalPrice = 0; // stores the total price of all tickets purchased in the purchases parameter.
+  let receipt = `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\n`; // begins the formatting of the receipt and stores it.
+  for (const purchase of purchases) { // => calculates the price and formats the receipt accordingly for each ticket purchased in the purchases array.
+    price = calculateTicketPrice(ticketData, purchase);// uses the previous function to calculate the price of the ticket.
+    if (typeof price === 'string') { // => if one of the errors from the previous function is triggered, price will be set to that error and returned.
+      return price;
+    } else { // => formats all the information from the purchased ticket and adds the properly formatted text to the receipt.
+      receipt += `${purchase.entrantType[0].toUpperCase()+purchase.entrantType.slice(1)} ${purchase.ticketType[0].toUpperCase()+purchase.ticketType.slice(1)} Admission: $${(price/100).toFixed(2)}`;// really starting to hate text formatting right now.
+      if (purchase.extras.length) {// => if any extras were purchased, formats and adds to receipt.
+        let extraText = '';// stores the formatted extras text.
+        for (const extra of purchase.extras) {
+          extraText += `${extra[0].toUpperCase()+extra.slice(1)} Access, `;// reeeaaally hating text.
+        }
+        extraText = extraText.slice(0, -2);
+        receipt += ` (${extraText})`;
+      }
+      receipt+=`\n`;
+      finalPrice += price;// stores the total cost for (you guessed it) later formatting.
+    }
+  }
+  receipt += `-------------------------------------------\nTOTAL: $${(finalPrice/100).toFixed(2)}`;
+  return receipt;
+}
 
 // Do not change anything below this line.
 module.exports = {
